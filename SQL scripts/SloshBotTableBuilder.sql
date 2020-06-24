@@ -85,11 +85,25 @@ create table RecipeIngredients(
 	modifiedDate datetime null
 );
 
+create table ClearanceLevel(
+    id int not null primary key,
+    role nvarchar(100) not null,
+    createdBy nvarchar(100) not null,
+    createdDate datetime not null,
+    modifiedBy nvarchar(100) null,
+    modifiedDate datetime null
+);
+
 create table User(
     id int not null auto_increment primary key,
     name nvarchar(100) not null,
-    username nvarchar(100) not null,
+    username nvarchar(100) not null unique,
     password nvarchar(100) not null,
+    clearanceLevel int default 0 not null,
+    constraint `User_fk_clearance_level`
+        foreign key (clearanceLevel) references ClearanceLevel(id)
+        on delete restrict
+        on update cascade,
     createdBy nvarchar(100) not null,
     createdDate datetime not null,
 	modifiedBy nvarchar(100) null,
