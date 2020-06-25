@@ -1,6 +1,5 @@
 package sloshbot.raspberrypi_api.models;
 
-import org.joda.time.DateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,18 +8,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import java.sql.Timestamp;
+
 @Entity
 @Table(name = "DrinkType")
 public class DrinkType {
-    private int id;
-    private String name;
-    private String createdBy;
-    private DateTime createdDate;
-    private String modifiedBy;
-    private DateTime modifiedDate;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @Column(name = "name", nullable = false)
+    private String name;
+    @Column(name = "createdBy", nullable = false)
+    private String createdBy;
+    @Column(name = "createdDate", nullable = false)
+    private Timestamp createdDate;
+    @Column(name = "modifiedBy")
+    private String modifiedBy;
+    @Column(name = "modifiedDate")
+    private Timestamp modifiedDate;
+
+    //region getters and setters
     public int getId() {
         return id;
     }
@@ -29,7 +37,6 @@ public class DrinkType {
         this.id = id;
     }
 
-    @Column(name = "name", nullable = false)
     public String getName() {
         return name;
     }
@@ -38,7 +45,6 @@ public class DrinkType {
         this.name = name;
     }
 
-    @Column(name = "createdBy", nullable = false)
     public String getCreatedBy() {
         return createdBy;
     }
@@ -47,16 +53,14 @@ public class DrinkType {
         this.createdBy = createdBy;
     }
 
-    @Column(name = "createdDate", nullable = false)
-    public DateTime getCreatedDate() {
+    public Timestamp getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(DateTime createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
 
-    @Column(name = "modifiedBy")
     public String getModifiedBy() {
         return modifiedBy;
     }
@@ -65,12 +69,12 @@ public class DrinkType {
         this.modifiedBy = modifiedBy;
     }
 
-    @Column(name = "modifiedDate")
-    public DateTime getModifiedDate() {
+    public Timestamp getModifiedDate() {
         return modifiedDate;
     }
 
-    public void setModifiedDate(DateTime modifiedDate) {
+    public void setModifiedDate(Timestamp modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
+    //endregion
 }

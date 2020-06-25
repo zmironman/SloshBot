@@ -1,39 +1,41 @@
 package sloshbot.raspberrypi_api.models;
 
+import java.sql.Timestamp;
+
 public class Recipeingredients {
 
-  private long recipeId;
-  private long ingredientId;
-  private long amount;
+  private int recipeId;
+  private int ingredientId;
+  private int amount;
   private String createdBy;
-  private java.sql.Timestamp createdDate;
+  private Timestamp createdDate;
   private String modifiedBy;
-  private java.sql.Timestamp modifiedDate;
+  private Timestamp modifiedDate;
 
 
-  public long getRecipeId() {
+  public int getRecipeId() {
     return recipeId;
   }
 
-  public void setRecipeId(long recipeId) {
+  public void setRecipeId(int recipeId) {
     this.recipeId = recipeId;
   }
 
 
-  public long getIngredientId() {
+  public int getIngredientId() {
     return ingredientId;
   }
 
-  public void setIngredientId(long ingredientId) {
+  public void setIngredientId(int ingredientId) {
     this.ingredientId = ingredientId;
   }
 
 
-  public long getAmount() {
+  public int getAmount() {
     return amount;
   }
 
-  public void setAmount(long amount) {
+  public void setAmount(int amount) {
     this.amount = amount;
   }
 
@@ -47,11 +49,11 @@ public class Recipeingredients {
   }
 
 
-  public java.sql.Timestamp getCreatedDate() {
+  public Timestamp getCreatedDate() {
     return createdDate;
   }
 
-  public void setCreatedDate(java.sql.Timestamp createdDate) {
+  public void setCreatedDate(Timestamp createdDate) {
     this.createdDate = createdDate;
   }
 
@@ -65,11 +67,11 @@ public class Recipeingredients {
   }
 
 
-  public java.sql.Timestamp getModifiedDate() {
+  public Timestamp getModifiedDate() {
     return modifiedDate;
   }
 
-  public void setModifiedDate(java.sql.Timestamp modifiedDate) {
+  public void setModifiedDate(Timestamp modifiedDate) {
     this.modifiedDate = modifiedDate;
   }
 

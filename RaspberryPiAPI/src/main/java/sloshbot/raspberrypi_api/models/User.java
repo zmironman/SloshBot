@@ -1,28 +1,52 @@
 package sloshbot.raspberrypi_api.models;
 
+import jnr.ffi.annotations.Clear;
+
+import javax.persistence.*;
 import java.sql.Timestamp;
 
+@Entity
+@Table(name = "User")
 public class User {
 
-  private long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
+  @Column(name = "name", nullable = false)
   private String name;
+  @Column(name = "username", nullable = false)
   private String username;
+  @Column(name = "password", nullable = false)
   private String password;
-  private long clearanceLevel;
-  private String createdBy;
+  @Column(name = "email", nullable = false)
+  private String email;
+  @ManyToOne
+  @JoinColumn(name="clearanceLevel")
+  private Clearancelevel clearanceLevel;
+  @Column(name = "createdDate", nullable = false)
   private Timestamp createdDate;
+  @Column(name = "modifiedBy")
   private String modifiedBy;
+  @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
 
+  public User(String name, String username, String email, String password) {
+    this.name = name;
+    this.username = username;
+    this.password = password;
+    this.email = email;
+  }
 
-  public long getId() {
+  public User(){}
+
+  //region getters and setters
+  public int getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(int id) {
     this.id = id;
   }
-
 
   public String getName() {
     return name;
@@ -32,7 +56,6 @@ public class User {
     this.name = name;
   }
 
-
   public String getUsername() {
     return username;
   }
@@ -40,7 +63,6 @@ public class User {
   public void setUsername(String username) {
     this.username = username;
   }
-
 
   public String getPassword() {
     return password;
@@ -50,24 +72,21 @@ public class User {
     this.password = password;
   }
 
+  public String getEmail() {
+    return email;
+  }
 
-  public long getClearanceLevel() {
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public Clearancelevel getClearanceLevel() {
     return clearanceLevel;
   }
 
-  public void setClearanceLevel(long clearanceLevel) {
+  public void setClearanceLevel(Clearancelevel clearanceLevel) {
     this.clearanceLevel = clearanceLevel;
   }
-
-
-  public String getCreatedBy() {
-    return createdBy;
-  }
-
-  public void setCreatedBy(String createdBy) {
-    this.createdBy = createdBy;
-  }
-
 
   public Timestamp getCreatedDate() {
     return createdDate;
@@ -94,5 +113,5 @@ public class User {
   public void setModifiedDate(Timestamp modifiedDate) {
     this.modifiedDate = modifiedDate;
   }
-
+  //endregion
 }

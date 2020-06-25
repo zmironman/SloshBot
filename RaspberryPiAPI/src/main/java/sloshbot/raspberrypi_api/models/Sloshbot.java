@@ -2,7 +2,7 @@ package sloshbot.raspberrypi_api.models;
 
 public class Sloshbot {
 
-  private long id;
+  private int id;
   private String name;
   private long ownerId;
   private String createdBy;
@@ -11,11 +11,11 @@ public class Sloshbot {
   private java.sql.Timestamp modifiedDate;
 
 
-  public long getId() {
+  public int getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(int id) {
     this.id = id;
   }
 

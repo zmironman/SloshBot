@@ -99,12 +99,12 @@ create table User(
     name nvarchar(100) not null,
     username nvarchar(100) not null unique,
     password nvarchar(100) not null,
+    email nvarchar(100) not null unique,
     clearanceLevel int default 0 not null,
     constraint `User_fk_clearance_level`
         foreign key (clearanceLevel) references ClearanceLevel(id)
         on delete restrict
         on update cascade,
-    createdBy nvarchar(100) not null,
     createdDate datetime not null,
 	modifiedBy nvarchar(100) null,
 	modifiedDate datetime null
