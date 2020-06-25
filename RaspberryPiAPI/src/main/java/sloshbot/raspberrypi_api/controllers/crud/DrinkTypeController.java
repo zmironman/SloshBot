@@ -23,7 +23,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/crud/drinktype")
+@RequestMapping("/api/crud/v1/drinktype")
 public class DrinkTypeController {
     @Autowired
     private DrinkTypeRepository drinkTypeRepository;
