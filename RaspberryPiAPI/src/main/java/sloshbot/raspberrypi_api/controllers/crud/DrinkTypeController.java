@@ -1,4 +1,4 @@
-package sloshbot.raspberrypi_api.controllers;
+package sloshbot.raspberrypi_api.controllers.crud;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;

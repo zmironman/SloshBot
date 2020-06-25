@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import sloshbot.raspberrypi_api.models.Roles;
 import sloshbot.raspberrypi_api.models.User;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -38,8 +39,8 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetailsImpl build(User user) {
-        List<GrantedAuthority> authorities = null;
-        int clearance = (int) user.getClearanceLevel().getId();
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        int clearance = user.getClearanceLevel().getId();
 
         if (clearance >= 4)
             authorities.add(new SimpleGrantedAuthority(Roles.ROLE_SUPERUSER.name()));
