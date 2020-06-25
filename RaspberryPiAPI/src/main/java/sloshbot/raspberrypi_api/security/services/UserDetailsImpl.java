@@ -5,7 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import sloshbot.raspberrypi_api.models.Roles;
-import sloshbot.raspberrypi_api.models.hibernateModels.User;
+import sloshbot.raspberrypi_api.models.DAOs.User;
 
 import java.util.ArrayList;
 import java.util.Collection;

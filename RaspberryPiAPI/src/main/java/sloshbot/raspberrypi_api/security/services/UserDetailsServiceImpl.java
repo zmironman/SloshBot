@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sloshbot.raspberrypi_api.models.hibernateModels.User;
+import sloshbot.raspberrypi_api.models.DAOs.User;
 import sloshbot.raspberrypi_api.repositories.UserRepository;
 
 @Service

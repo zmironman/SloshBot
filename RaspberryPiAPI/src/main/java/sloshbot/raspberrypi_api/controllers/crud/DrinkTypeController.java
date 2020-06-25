@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import sloshbot.raspberrypi_api.util.exceptions.ResourceNotFoundException;
-import sloshbot.raspberrypi_api.models.hibernateModels.DrinkType;
+import sloshbot.raspberrypi_api.models.DAOs.DrinkType;
 import sloshbot.raspberrypi_api.repositories.DrinkTypeRepository;
 
 import java.sql.Timestamp;
@@ -65,8 +65,8 @@ public class DrinkTypeController {
         return ResponseEntity.ok(updatedDrinkType);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SUPERUSER')")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SUPERUSER')")
     public boolean deleteDrinkType(@PathVariable(value = "id") Long drinkTypeId)
             throws ResourceNotFoundException {
         DrinkType drinkType = drinkTypeRepository.findById(drinkTypeId)

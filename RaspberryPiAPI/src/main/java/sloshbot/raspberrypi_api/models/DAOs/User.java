@@ -1,6 +1,5 @@
-package sloshbot.raspberrypi_api.models.hibernateModels;
+package sloshbot.raspberrypi_api.models.DAOs;
 
-import org.joda.time.DateTime;
 import sloshbot.raspberrypi_api.models.HibernatePOJO;
 
 import javax.persistence.*;
@@ -8,50 +7,43 @@ import java.sql.Timestamp;
 import java.util.Set;
 
 @Entity
-@Table(name = "SloshBot")
-public class SloshBot extends HibernatePOJO {
+@Table(name = "User")
+public class User extends HibernatePOJO {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
   @Column(name = "name", nullable = false)
   private String name;
-  @Column(name = "ownerId", nullable = false)
-  private int ownerId;
-  @Column(name = "createdBy", nullable = false)
-  private String createdBy;
+  @Column(name = "username", nullable = false)
+  private String username;
+  @Column(name = "password", nullable = false)
+  private String password;
+  @Column(name = "email", nullable = false)
+  private String email;
+  @ManyToOne
+  @JoinColumn(name="clearanceLevel")
+  private ClearanceLevel clearanceLevel;
   @Column(name = "createdDate", nullable = false)
   private Timestamp createdDate;
   @Column(name = "modifiedBy")
   private String modifiedBy;
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
-
-  @ManyToOne
-  @JoinColumn(name = "ownerId", insertable = false, updatable = false)
-  private User owner;
-  @OneToMany(mappedBy = "sloshBot")
+  @OneToMany(mappedBy = "user")
   private Set<OrderHistory> orderHistory;
-  @OneToMany(mappedBy = "sloshBot")
-  private Set<Optic> optics;
+  @OneToMany(mappedBy = "owner")
+  private Set<SloshBot> sloshBots;
 
   //region constructors
-  public SloshBot(String name, int ownerId, String createdBy) {
+  public User(String name, String username, String email, String password) {
     this.name = name;
-    this.ownerId = ownerId;
-    this.createdBy = createdBy;
-    this.createdDate = new Timestamp(DateTime.now().getMillis());
+    this.username = username;
+    this.password = password;
+    this.email = email;
   }
 
-  public SloshBot(String name, String createdBy, User owner) {
-    this.name = name;
-    this.ownerId = owner.getId();
-    this.createdBy = createdBy;
-    this.createdDate = new Timestamp(DateTime.now().getMillis());
-    this.owner = owner;
-  }
-
-  public SloshBot(){}
+  public User(){}
   //endregion
 
   //region getters and setters
@@ -71,20 +63,36 @@ public class SloshBot extends HibernatePOJO {
     this.name = name;
   }
 
-  public int getOwnerId() {
-    return ownerId;
+  public String getUsername() {
+    return username;
   }
 
-  public void setOwnerId(int ownerId) {
-    this.ownerId = ownerId;
+  public void setUsername(String username) {
+    this.username = username;
   }
 
-  public String getCreatedBy() {
-    return createdBy;
+  public String getPassword() {
+    return password;
   }
 
-  public void setCreatedBy(String createdBy) {
-    this.createdBy = createdBy;
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public ClearanceLevel getClearanceLevel() {
+    return clearanceLevel;
+  }
+
+  public void setClearanceLevel(ClearanceLevel clearanceLevel) {
+    this.clearanceLevel = clearanceLevel;
   }
 
   public Timestamp getCreatedDate() {
@@ -95,6 +103,7 @@ public class SloshBot extends HibernatePOJO {
     this.createdDate = createdDate;
   }
 
+
   public String getModifiedBy() {
     return modifiedBy;
   }
@@ -103,20 +112,13 @@ public class SloshBot extends HibernatePOJO {
     this.modifiedBy = modifiedBy;
   }
 
+
   public Timestamp getModifiedDate() {
     return modifiedDate;
   }
 
   public void setModifiedDate(Timestamp modifiedDate) {
     this.modifiedDate = modifiedDate;
-  }
-
-  public User getOwner() {
-    return owner;
-  }
-
-  public void setOwner(User owner) {
-    this.owner = owner;
   }
 
   public Set<OrderHistory> getOrderHistory() {
@@ -127,12 +129,13 @@ public class SloshBot extends HibernatePOJO {
     this.orderHistory = orderHistory;
   }
 
-  public Set<Optic> getOptics() {
-    return optics;
+  public Set<SloshBot> getSloshBots() {
+    return sloshBots;
   }
 
-  public void setOptics(Set<Optic> optics) {
-    this.optics = optics;
+  public void setSloshBots(Set<SloshBot> sloshBots) {
+    this.sloshBots = sloshBots;
   }
+
   //endregion
 }

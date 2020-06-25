@@ -1,4 +1,4 @@
-package sloshbot.raspberrypi_api.models.hibernateModels;
+package sloshbot.raspberrypi_api.models.DAOs;
 
 import sloshbot.raspberrypi_api.models.HibernatePOJO;
 import sloshbot.raspberrypi_api.models.Roles;
@@ -6,7 +6,6 @@ import sloshbot.raspberrypi_api.models.Roles;
 import javax.persistence.*;
 
 import java.sql.Timestamp;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity

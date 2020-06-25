@@ -1,4 +1,4 @@
-package sloshbot.raspberrypi_api.models.hibernateModels;
+package sloshbot.raspberrypi_api.models.DAOs;
 
 import org.joda.time.DateTime;
 import sloshbot.raspberrypi_api.models.HibernatePOJO;

@@ -1,50 +1,57 @@
-package sloshbot.raspberrypi_api.models.hibernateModels;
+package sloshbot.raspberrypi_api.models.DAOs;
 
+import org.joda.time.DateTime;
 import sloshbot.raspberrypi_api.models.HibernatePOJO;
-import sloshbot.raspberrypi_api.models.hibernateModels.ClearanceLevel;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Set;
 
 @Entity
-@Table(name = "User")
-public class User extends HibernatePOJO {
+@Table(name = "SloshBot")
+public class SloshBot extends HibernatePOJO {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
   @Column(name = "name", nullable = false)
   private String name;
-  @Column(name = "username", nullable = false)
-  private String username;
-  @Column(name = "password", nullable = false)
-  private String password;
-  @Column(name = "email", nullable = false)
-  private String email;
-  @ManyToOne
-  @JoinColumn(name="clearanceLevel")
-  private ClearanceLevel clearanceLevel;
+  @Column(name = "ownerId", nullable = false)
+  private int ownerId;
+  @Column(name = "createdBy", nullable = false)
+  private String createdBy;
   @Column(name = "createdDate", nullable = false)
   private Timestamp createdDate;
   @Column(name = "modifiedBy")
   private String modifiedBy;
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
-  @OneToMany(mappedBy = "user")
+
+  @ManyToOne
+  @JoinColumn(name = "ownerId", insertable = false, updatable = false)
+  private User owner;
+  @OneToMany(mappedBy = "sloshBot")
   private Set<OrderHistory> orderHistory;
-  @OneToMany(mappedBy = "owner")
-  private Set<SloshBot> sloshBots;
+  @OneToMany(mappedBy = "sloshBot")
+  private Set<Optic> optics;
 
   //region constructors
-  public User(String name, String username, String email, String password) {
+  public SloshBot(String name, int ownerId, String createdBy) {
     this.name = name;
-    this.username = username;
-    this.password = password;
-    this.email = email;
+    this.ownerId = ownerId;
+    this.createdBy = createdBy;
+    this.createdDate = new Timestamp(DateTime.now().getMillis());
   }
 
-  public User(){}
+  public SloshBot(String name, String createdBy, User owner) {
+    this.name = name;
+    this.ownerId = owner.getId();
+    this.createdBy = createdBy;
+    this.createdDate = new Timestamp(DateTime.now().getMillis());
+    this.owner = owner;
+  }
+
+  public SloshBot(){}
   //endregion
 
   //region getters and setters
@@ -64,36 +71,20 @@ public class User extends HibernatePOJO {
     this.name = name;
   }
 
-  public String getUsername() {
-    return username;
+  public int getOwnerId() {
+    return ownerId;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
+  public void setOwnerId(int ownerId) {
+    this.ownerId = ownerId;
   }
 
-  public String getPassword() {
-    return password;
+  public String getCreatedBy() {
+    return createdBy;
   }
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public ClearanceLevel getClearanceLevel() {
-    return clearanceLevel;
-  }
-
-  public void setClearanceLevel(ClearanceLevel clearanceLevel) {
-    this.clearanceLevel = clearanceLevel;
+  public void setCreatedBy(String createdBy) {
+    this.createdBy = createdBy;
   }
 
   public Timestamp getCreatedDate() {
@@ -104,7 +95,6 @@ public class User extends HibernatePOJO {
     this.createdDate = createdDate;
   }
 
-
   public String getModifiedBy() {
     return modifiedBy;
   }
@@ -113,13 +103,20 @@ public class User extends HibernatePOJO {
     this.modifiedBy = modifiedBy;
   }
 
-
   public Timestamp getModifiedDate() {
     return modifiedDate;
   }
 
   public void setModifiedDate(Timestamp modifiedDate) {
     this.modifiedDate = modifiedDate;
+  }
+
+  public User getOwner() {
+    return owner;
+  }
+
+  public void setOwner(User owner) {
+    this.owner = owner;
   }
 
   public Set<OrderHistory> getOrderHistory() {
@@ -130,13 +127,12 @@ public class User extends HibernatePOJO {
     this.orderHistory = orderHistory;
   }
 
-  public Set<SloshBot> getSloshBots() {
-    return sloshBots;
+  public Set<Optic> getOptics() {
+    return optics;
   }
 
-  public void setSloshBots(Set<SloshBot> sloshBots) {
-    this.sloshBots = sloshBots;
+  public void setOptics(Set<Optic> optics) {
+    this.optics = optics;
   }
-
   //endregion
 }

@@ -14,8 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import sloshbot.raspberrypi_api.models.hibernateModels.ClearanceLevel;
-import sloshbot.raspberrypi_api.models.hibernateModels.User;
+import sloshbot.raspberrypi_api.models.DAOs.ClearanceLevel;
+import sloshbot.raspberrypi_api.models.DAOs.User;
 import sloshbot.raspberrypi_api.payloads.requests.LoginRequest;
 import sloshbot.raspberrypi_api.payloads.requests.SignupRequest;
 import sloshbot.raspberrypi_api.payloads.responses.JwtResponse;
