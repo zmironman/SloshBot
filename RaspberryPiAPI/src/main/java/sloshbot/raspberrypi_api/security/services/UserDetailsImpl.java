@@ -50,6 +50,7 @@ public class UserDetailsImpl implements UserDetails {
             authorities.add(new SimpleGrantedAuthority(Roles.ROLE_MODERATOR.name()));
         if (clearance >= 1)
             authorities.add(new SimpleGrantedAuthority(Roles.ROLE_USER.name()));
+        authorities.add(new SimpleGrantedAuthority(Roles.ROLE_GUEST.name()));
 
         return new UserDetailsImpl(
                 user.getId(),

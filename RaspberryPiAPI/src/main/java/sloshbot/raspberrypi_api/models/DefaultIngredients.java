@@ -1,45 +1,41 @@
 package sloshbot.raspberrypi_api.models;
 
-import org.hibernate.annotations.Generated;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "Ingredient")
-public class Ingredient {
+@Table(name = "DefaultIngredients")
+public class DefaultIngredients {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
-  @Column(name = "name",nullable = false)
-  private String name;
-  @Column(name = "ingredientTypeId",nullable = false)
+  @Column(name = "drinkTypeID", nullable = false)
+  private int drinkTypeId;
+  @Column(name = "ingredientTypeId", nullable = false)
   private int ingredientTypeId;
-  @Column(name = "alcoholContent",nullable = false)
-  private int alcoholContent;
-  @Column(name = "price")
-  private int price;
-  @Column(name = "createdBy",nullable = false)
+  @Column(name = "amount", nullable = false)
+  private int amount;
+  @Column(name = "createdBy", nullable = false)
   private String createdBy;
-  @Column(name = "createdDate",nullable = false)
+  @Column(name = "createdDate", nullable = false)
   private Timestamp createdDate;
   @Column(name = "modifiedBy")
   private String modifiedBy;
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
 
-  public Ingredient(String name, int ingredientTypeId, int alcoholContent, int price, String createdBy) {
-    this.name = name;
+  public DefaultIngredients(int drinkTypeId, int ingredientTypeId, int amount, String createdBy) {
+    this.drinkTypeId = drinkTypeId;
     this.ingredientTypeId = ingredientTypeId;
-    this.alcoholContent = alcoholContent;
-    this.price = price;
+    this.amount = amount;
     this.createdBy = createdBy;
     this.createdDate = new Timestamp(DateTime.now().getMillis());
   }
 
-  public Ingredient(){}
+  public DefaultIngredients(){}
 
   //region getters and setters
   public int getId() {
@@ -50,12 +46,12 @@ public class Ingredient {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
+  public int getDrinkTypeId() {
+    return drinkTypeId;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setDrinkTypeId(int drinkTypeId) {
+    this.drinkTypeId = drinkTypeId;
   }
 
   public int getIngredientTypeId() {
@@ -66,20 +62,12 @@ public class Ingredient {
     this.ingredientTypeId = ingredientTypeId;
   }
 
-  public int getAlcoholContent() {
-    return alcoholContent;
+  public int getAmount() {
+    return amount;
   }
 
-  public void setAlcoholContent(int alcoholContent) {
-    this.alcoholContent = alcoholContent;
-  }
-
-  public int getPrice() {
-    return price;
-  }
-
-  public void setPrice(int price) {
-    this.price = price;
+  public void setAmount(int amount) {
+    this.amount = amount;
   }
 
   public String getCreatedBy() {

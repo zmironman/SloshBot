@@ -1,72 +1,96 @@
 package sloshbot.raspberrypi_api.models;
 
+import org.joda.time.DateTime;
+
+import javax.persistence.*;
+import java.sql.Timestamp;
+
+@Entity
+@Table(name = "Optic")
 public class Optic {
 
-  private long id;
-  private long ingredientId;
-  private long distanceFromHome;
-  private long remainingLiquid;
-  private long pinNumber;
-  private long sloshbotId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
+  @Column(name = "ingredientId", nullable = false)
+  private int ingredientId;
+  @Column(name = "distanceFromHome", nullable = false)
+  private int distanceFromHome;
+  @Column(name = "remainingLiquid", nullable = false)
+  private int remainingLiquid;
+  @Column(name = "pinNumber", nullable = false)
+  private int pinNumber;
+  @Column(name = "sloshBotId", nullable = false)
+  private int sloshBotId;
+  @Column(name = "createdBy", nullable = false)
   private String createdBy;
-  private java.sql.Timestamp createdDate;
+  @Column(name = "createdDate", nullable = false)
+  private Timestamp createdDate;
+  @Column(name = "modifiedBy")
   private String modifiedBy;
-  private java.sql.Timestamp modifiedDate;
+  @Column(name = "modifiedDate")
+  private Timestamp modifiedDate;
 
+  public Optic(int ingredientId, int distanceFromHome, int remainingLiquid, int pinNumber, int sloshBotId, String createdBy) {
+    this.ingredientId = ingredientId;
+    this.distanceFromHome = distanceFromHome;
+    this.remainingLiquid = remainingLiquid;
+    this.pinNumber = pinNumber;
+    this.sloshBotId = sloshBotId;
+    this.createdBy = createdBy;
+    this.createdDate = new Timestamp(DateTime.now().getMillis());
+  }
 
-  public long getId() {
+  public Optic(){}
+
+  //region getters and setters
+  public int getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(int id) {
     this.id = id;
   }
 
-
-  public long getIngredientId() {
+  public int getIngredientId() {
     return ingredientId;
   }
 
-  public void setIngredientId(long ingredientId) {
+  public void setIngredientId(int ingredientId) {
     this.ingredientId = ingredientId;
   }
 
-
-  public long getDistanceFromHome() {
+  public int getDistanceFromHome() {
     return distanceFromHome;
   }
 
-  public void setDistanceFromHome(long distanceFromHome) {
+  public void setDistanceFromHome(int distanceFromHome) {
     this.distanceFromHome = distanceFromHome;
   }
 
-
-  public long getRemainingLiquid() {
+  public int getRemainingLiquid() {
     return remainingLiquid;
   }
 
-  public void setRemainingLiquid(long remainingLiquid) {
+  public void setRemainingLiquid(int remainingLiquid) {
     this.remainingLiquid = remainingLiquid;
   }
 
-
-  public long getPinNumber() {
+  public int getPinNumber() {
     return pinNumber;
   }
 
-  public void setPinNumber(long pinNumber) {
+  public void setPinNumber(int pinNumber) {
     this.pinNumber = pinNumber;
   }
 
-
-  public long getSloshbotId() {
-    return sloshbotId;
+  public int getSloshBotId() {
+    return sloshBotId;
   }
 
-  public void setSloshbotId(long sloshbotId) {
-    this.sloshbotId = sloshbotId;
+  public void setSloshBotId(int sloshBotId) {
+    this.sloshBotId = sloshBotId;
   }
-
 
   public String getCreatedBy() {
     return createdBy;
@@ -76,15 +100,13 @@ public class Optic {
     this.createdBy = createdBy;
   }
 
-
-  public java.sql.Timestamp getCreatedDate() {
+  public Timestamp getCreatedDate() {
     return createdDate;
   }
 
-  public void setCreatedDate(java.sql.Timestamp createdDate) {
+  public void setCreatedDate(Timestamp createdDate) {
     this.createdDate = createdDate;
   }
-
 
   public String getModifiedBy() {
     return modifiedBy;
@@ -94,13 +116,12 @@ public class Optic {
     this.modifiedBy = modifiedBy;
   }
 
-
-  public java.sql.Timestamp getModifiedDate() {
+  public Timestamp getModifiedDate() {
     return modifiedDate;
   }
 
-  public void setModifiedDate(java.sql.Timestamp modifiedDate) {
+  public void setModifiedDate(Timestamp modifiedDate) {
     this.modifiedDate = modifiedDate;
   }
-
+  //endregion
 }

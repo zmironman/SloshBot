@@ -1,25 +1,49 @@
 package sloshbot.raspberrypi_api.models;
 
+import org.joda.time.DateTime;
+
+import javax.persistence.*;
+import java.sql.Timestamp;
+
+@Entity
+@Table(name = "Recipe")
 public class Recipe {
 
-  private long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
+  @Column(name = "name", nullable = false)
   private String name;
-  private long drinkTypeId;
-  private long featured;
+  @Column(name = "drinkTypeId", nullable = false)
+  private int drinkTypeId;
+  @Column(name = "featured", nullable = false)
+  private int featured;
+  @Column(name = "createdBy", nullable = false)
   private String createdBy;
-  private java.sql.Timestamp createdDate;
+  @Column(name = "createdDate", nullable = false)
+  private Timestamp createdDate;
+  @Column(name = "modifiedBy")
   private String modifiedBy;
-  private java.sql.Timestamp modifiedDate;
+  @Column(name = "modifiedDate")
+  private Timestamp modifiedDate;
 
+  public Recipe(String name, int drinkTypeId, String createdBy) {
+    this.name = name;
+    this.drinkTypeId = drinkTypeId;
+    this.createdBy = createdBy;
+    this.createdDate = new Timestamp(DateTime.now().getMillis());
+  }
 
-  public long getId() {
+  public Recipe(){}
+
+  //region getters and setters
+  public int getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(int id) {
     this.id = id;
   }
-
 
   public String getName() {
     return name;
@@ -29,24 +53,21 @@ public class Recipe {
     this.name = name;
   }
 
-
-  public long getDrinkTypeId() {
+  public int getDrinkTypeId() {
     return drinkTypeId;
   }
 
-  public void setDrinkTypeId(long drinkTypeId) {
+  public void setDrinkTypeId(int drinkTypeId) {
     this.drinkTypeId = drinkTypeId;
   }
 
-
-  public long getFeatured() {
+  public int getFeatured() {
     return featured;
   }
 
-  public void setFeatured(long featured) {
+  public void setFeatured(int featured) {
     this.featured = featured;
   }
-
 
   public String getCreatedBy() {
     return createdBy;
@@ -56,15 +77,13 @@ public class Recipe {
     this.createdBy = createdBy;
   }
 
-
-  public java.sql.Timestamp getCreatedDate() {
+  public Timestamp getCreatedDate() {
     return createdDate;
   }
 
-  public void setCreatedDate(java.sql.Timestamp createdDate) {
+  public void setCreatedDate(Timestamp createdDate) {
     this.createdDate = createdDate;
   }
-
 
   public String getModifiedBy() {
     return modifiedBy;
@@ -74,13 +93,12 @@ public class Recipe {
     this.modifiedBy = modifiedBy;
   }
 
-
-  public java.sql.Timestamp getModifiedDate() {
+  public Timestamp getModifiedDate() {
     return modifiedDate;
   }
 
-  public void setModifiedDate(java.sql.Timestamp modifiedDate) {
+  public void setModifiedDate(Timestamp modifiedDate) {
     this.modifiedDate = modifiedDate;
   }
-
+  //endregion
 }

@@ -35,6 +35,7 @@ create table DrinkType(
 );
 
 create table DefaultIngredients(
+    id int not null auto_increment primary key,
     drinkTypeID int not null,
     constraint `DefaultIngredients_fk_drink_type`
         foreign key (drinkTypeID) references DrinkType(id)
@@ -68,6 +69,7 @@ create table Recipe(
 );
 
 create table RecipeIngredients(
+    id int not null auto_increment primary key,
     recipeID int not null,
     constraint `RecipeIngredients_fk_recipe_id`
         foreign key (recipeID) references Recipe(id)
