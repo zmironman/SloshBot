@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import sloshbot.raspberrypi_api.exceptions.ResourceNotFoundException;
+import sloshbot.raspberrypi_api.util.exceptions.ResourceNotFoundException;
 import sloshbot.raspberrypi_api.models.hibernateModels.DrinkType;
 import sloshbot.raspberrypi_api.repositories.DrinkTypeRepository;
 

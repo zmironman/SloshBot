@@ -28,7 +28,7 @@ public class SloshBot extends HibernatePOJO {
   private Timestamp modifiedDate;
 
   @ManyToOne
-  @JoinColumn(name = "ownerId")
+  @JoinColumn(name = "ownerId", insertable = false, updatable = false)
   private User owner;
   @OneToMany(mappedBy = "sloshBot")
   private Set<OrderHistory> orderHistory;

@@ -28,10 +28,10 @@ public class DefaultIngredients extends HibernatePOJO {
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
   @ManyToOne
-  @JoinColumn(name="drinkTypeID")
+  @JoinColumn(name="drinkTypeID", insertable = false, updatable = false)
   private DrinkType drinkType;
   @ManyToOne
-  @JoinColumn(name="ingredientTypeId")
+  @JoinColumn(name="ingredientTypeId", insertable = false, updatable = false)
   private IngredientType ingredientType;
 
   //region constructors

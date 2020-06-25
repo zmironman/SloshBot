@@ -33,10 +33,10 @@ public class Optic extends HibernatePOJO {
   private Timestamp modifiedDate;
 
   @ManyToOne
-  @JoinColumn(name = "ingredientId")
+  @JoinColumn(name = "ingredientId", insertable = false, updatable = false)
   private Ingredient ingredient;
   @ManyToOne
-  @JoinColumn(name = "sloshBotId")
+  @JoinColumn(name = "sloshBotId", insertable = false, updatable = false)
   private SloshBot sloshBot;
 
   //region constructors

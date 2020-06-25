@@ -28,10 +28,10 @@ public class RecipeIngredients extends HibernatePOJO {
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
   @ManyToOne
-  @JoinColumn(name = "recipeId")
+  @JoinColumn(name = "recipeId", insertable = false, updatable = false)
   private Recipe recipe;
   @ManyToOne
-  @JoinColumn(name = "ingredientId")
+  @JoinColumn(name = "ingredientId", insertable = false, updatable = false)
   private Ingredient ingredient;
 
   //region constructors

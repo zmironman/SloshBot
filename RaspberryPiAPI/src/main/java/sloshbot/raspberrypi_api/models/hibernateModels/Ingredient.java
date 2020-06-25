@@ -31,7 +31,7 @@ public class Ingredient extends HibernatePOJO {
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
   @ManyToOne
-  @JoinColumn(name="ingredientTypeId")
+  @JoinColumn(name="ingredientTypeId", insertable = false, updatable = false)
   private IngredientType ingredientType;
   @OneToMany(mappedBy = "ingredient")
   private Set<RecipeIngredients> recipeIngredients;

@@ -1,4 +1,4 @@
-package sloshbot.raspberrypi_api.exceptions;
+package sloshbot.raspberrypi_api.util.exceptions;
 
 import org.springframework.web.bind.annotation.ResponseStatus;
 

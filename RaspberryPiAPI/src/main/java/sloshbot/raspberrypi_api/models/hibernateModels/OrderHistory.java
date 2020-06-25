@@ -22,13 +22,13 @@ public class OrderHistory extends HibernatePOJO {
   @Column(name = "createdDate", nullable = false)
   private Timestamp createdDate;
   @ManyToOne
-  @JoinColumn(name = "recipeId")
+  @JoinColumn(name = "recipeId", insertable = false, updatable = false)
   private Recipe recipe;
   @ManyToOne
-  @JoinColumn(name = "userId")
+  @JoinColumn(name = "userId", insertable = false, updatable = false)
   private User user;
   @ManyToOne
-  @JoinColumn(name = "sloshBotId")
+  @JoinColumn(name = "sloshBotId", insertable = false, updatable = false)
   private SloshBot sloshBot;
 
   //region constructors
