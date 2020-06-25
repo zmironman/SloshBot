@@ -1,6 +1,7 @@
-package sloshbot.raspberrypi_api.models;
+package sloshbot.raspberrypi_api.models.hibernateModels;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import sloshbot.raspberrypi_api.models.HibernatePOJO;
+import sloshbot.raspberrypi_api.models.Roles;
 
 import javax.persistence.*;
 
@@ -10,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "ClearanceLevel")
-public class Clearancelevel {
+public class ClearanceLevel extends HibernatePOJO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +27,10 @@ public class Clearancelevel {
     @Column(name = "modifiedDate")
     private Timestamp modifiedDate;
     @OneToMany(mappedBy = "clearanceLevel", cascade = CascadeType.ALL)
-    private Set<User> users = new HashSet<>();
+    private Set<User> users;
 
-    public Clearancelevel(long clearance) {
+    //region constructors
+    public ClearanceLevel(long clearance) {
         this.id = (int) clearance;
         switch((int) clearance){
             case 4:
@@ -49,10 +51,11 @@ public class Clearancelevel {
         }
     }
 
-    public Clearancelevel(){
+    public ClearanceLevel(){
         id = 0;
         role = Roles.ROLE_GUEST.name();
     }
+    //endregion
 
     //region getters and setters
     public int getId() {

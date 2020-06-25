@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import sloshbot.raspberrypi_api.exceptions.ResourceNotFoundException;
-import sloshbot.raspberrypi_api.models.DrinkType;
+import sloshbot.raspberrypi_api.models.hibernateModels.DrinkType;
 import sloshbot.raspberrypi_api.repositories.DrinkTypeRepository;
 
 import java.sql.Timestamp;
@@ -44,8 +44,8 @@ public class DrinkTypeController {
     @PostMapping("/add")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('SUPERUSER')")
     public DrinkType createDrinkType(@RequestBody DrinkType drinkType) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        drinkType.setCreatedBy(authentication.getName());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        drinkType.setCreatedBy(authentication.getName());
         drinkType.setCreatedDate(new Timestamp(DateTime.now().getMillis()));
         return drinkTypeRepository.save(drinkType);
     }
@@ -59,8 +59,8 @@ public class DrinkTypeController {
                 .orElseThrow(() -> new ResourceNotFoundException("DrinkType not found for this id ::" + drinkTypeId));
         drinkType.setName(drinkTypeDetails.getName());
         drinkType.setModifiedDate(new Timestamp(DateTime.now().getMillis()));
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        drinkType.setModifiedBy(authentication.getName());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        drinkType.setModifiedBy(authentication.getName());
         final DrinkType updatedDrinkType = drinkTypeRepository.save(drinkType);
         return ResponseEntity.ok(updatedDrinkType);
     }

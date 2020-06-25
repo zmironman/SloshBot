@@ -1,23 +1,21 @@
-package sloshbot.raspberrypi_api.models;
+package sloshbot.raspberrypi_api.models.hibernateModels;
 
 import org.joda.time.DateTime;
+import sloshbot.raspberrypi_api.models.HibernatePOJO;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Entity
-@Table(name = "Recipe")
-public class Recipe {
+@Table(name = "IngredientType")
+public class IngredientType extends HibernatePOJO {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
   @Column(name = "name", nullable = false)
   private String name;
-  @Column(name = "drinkTypeId", nullable = false)
-  private int drinkTypeId;
-  @Column(name = "featured", nullable = false)
-  private int featured;
   @Column(name = "createdBy", nullable = false)
   private String createdBy;
   @Column(name = "createdDate", nullable = false)
@@ -26,15 +24,20 @@ public class Recipe {
   private String modifiedBy;
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
+  @OneToMany(mappedBy = "ingredientType")
+  private Set<DefaultIngredients> defaultIngredients;
+  @OneToMany(mappedBy ="ingredientType")
+  private Set<Ingredient> ingredients;
 
-  public Recipe(String name, int drinkTypeId, String createdBy) {
+  //region constructors
+  public IngredientType(String name, String createdBy) {
     this.name = name;
-    this.drinkTypeId = drinkTypeId;
     this.createdBy = createdBy;
     this.createdDate = new Timestamp(DateTime.now().getMillis());
   }
 
-  public Recipe(){}
+  public IngredientType(){}
+  //endregion
 
   //region getters and setters
   public int getId() {
@@ -51,22 +54,6 @@ public class Recipe {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public int getDrinkTypeId() {
-    return drinkTypeId;
-  }
-
-  public void setDrinkTypeId(int drinkTypeId) {
-    this.drinkTypeId = drinkTypeId;
-  }
-
-  public int getFeatured() {
-    return featured;
-  }
-
-  public void setFeatured(int featured) {
-    this.featured = featured;
   }
 
   public String getCreatedBy() {
@@ -100,5 +87,22 @@ public class Recipe {
   public void setModifiedDate(Timestamp modifiedDate) {
     this.modifiedDate = modifiedDate;
   }
+
+  public Set<DefaultIngredients> getDefaultIngredients() {
+    return defaultIngredients;
+  }
+
+  public void setDefaultIngredients(Set<DefaultIngredients> defaultIngredients) {
+    this.defaultIngredients = defaultIngredients;
+  }
+
+  public Set<Ingredient> getIngredients() {
+    return ingredients;
+  }
+
+  public void setIngredients(Set<Ingredient> ingredients) {
+    this.ingredients = ingredients;
+  }
+
   //endregion
 }

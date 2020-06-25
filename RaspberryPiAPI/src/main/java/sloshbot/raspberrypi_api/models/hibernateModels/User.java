@@ -1,13 +1,15 @@
-package sloshbot.raspberrypi_api.models;
+package sloshbot.raspberrypi_api.models.hibernateModels;
 
-import jnr.ffi.annotations.Clear;
+import sloshbot.raspberrypi_api.models.HibernatePOJO;
+import sloshbot.raspberrypi_api.models.hibernateModels.ClearanceLevel;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Entity
 @Table(name = "User")
-public class User {
+public class User extends HibernatePOJO {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,14 +24,19 @@ public class User {
   private String email;
   @ManyToOne
   @JoinColumn(name="clearanceLevel")
-  private Clearancelevel clearanceLevel;
+  private ClearanceLevel clearanceLevel;
   @Column(name = "createdDate", nullable = false)
   private Timestamp createdDate;
   @Column(name = "modifiedBy")
   private String modifiedBy;
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
+  @OneToMany(mappedBy = "user")
+  private Set<OrderHistory> orderHistory;
+  @OneToMany(mappedBy = "owner")
+  private Set<SloshBot> sloshBots;
 
+  //region constructors
   public User(String name, String username, String email, String password) {
     this.name = name;
     this.username = username;
@@ -38,6 +45,7 @@ public class User {
   }
 
   public User(){}
+  //endregion
 
   //region getters and setters
   public int getId() {
@@ -80,11 +88,11 @@ public class User {
     this.email = email;
   }
 
-  public Clearancelevel getClearanceLevel() {
+  public ClearanceLevel getClearanceLevel() {
     return clearanceLevel;
   }
 
-  public void setClearanceLevel(Clearancelevel clearanceLevel) {
+  public void setClearanceLevel(ClearanceLevel clearanceLevel) {
     this.clearanceLevel = clearanceLevel;
   }
 
@@ -113,5 +121,22 @@ public class User {
   public void setModifiedDate(Timestamp modifiedDate) {
     this.modifiedDate = modifiedDate;
   }
+
+  public Set<OrderHistory> getOrderHistory() {
+    return orderHistory;
+  }
+
+  public void setOrderHistory(Set<OrderHistory> orderHistory) {
+    this.orderHistory = orderHistory;
+  }
+
+  public Set<SloshBot> getSloshBots() {
+    return sloshBots;
+  }
+
+  public void setSloshBots(Set<SloshBot> sloshBots) {
+    this.sloshBots = sloshBots;
+  }
+
   //endregion
 }

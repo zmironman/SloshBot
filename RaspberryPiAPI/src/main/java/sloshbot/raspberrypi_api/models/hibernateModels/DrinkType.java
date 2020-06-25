@@ -1,18 +1,17 @@
-package sloshbot.raspberrypi_api.models;
+package sloshbot.raspberrypi_api.models.hibernateModels;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.joda.time.DateTime;
+import sloshbot.raspberrypi_api.models.HibernatePOJO;
+
+import javax.persistence.*;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Entity
 @Table(name = "DrinkType")
-public class DrinkType {
+public class DrinkType extends HibernatePOJO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +26,22 @@ public class DrinkType {
     private String modifiedBy;
     @Column(name = "modifiedDate")
     private Timestamp modifiedDate;
+    @OneToMany(mappedBy="drinkType")
+    private Set<DefaultIngredients> defaultIngredients;
+    @OneToMany(mappedBy="drinkType")
+    private Set<Recipe> recipes;
+
+    //region constructors
+
+    public DrinkType(String name, String createdBy) {
+        this.name = name;
+        this.createdBy = createdBy;
+        this.createdDate = new Timestamp(DateTime.now().getMillis());
+    }
+
+    public DrinkType(){}
+
+    //endregion
 
     //region getters and setters
     public int getId() {
@@ -75,6 +90,22 @@ public class DrinkType {
 
     public void setModifiedDate(Timestamp modifiedDate) {
         this.modifiedDate = modifiedDate;
+    }
+
+    public Set<DefaultIngredients> getDefaultIngredients() {
+        return defaultIngredients;
+    }
+
+    public void setDefaultIngredients(Set<DefaultIngredients> defaultIngredients) {
+        this.defaultIngredients = defaultIngredients;
+    }
+
+    public Set<Recipe> getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(Set<Recipe> recipes) {
+        this.recipes = recipes;
     }
     //endregion
 }

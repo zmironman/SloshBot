@@ -1,13 +1,15 @@
-package sloshbot.raspberrypi_api.models;
+package sloshbot.raspberrypi_api.models.hibernateModels;
 
 import org.joda.time.DateTime;
+import sloshbot.raspberrypi_api.models.HibernatePOJO;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Entity
 @Table(name = "SloshBot")
-public class SloshBot {
+public class SloshBot extends HibernatePOJO {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +27,15 @@ public class SloshBot {
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
 
+  @ManyToOne
+  @JoinColumn(name = "ownerId")
+  private User owner;
+  @OneToMany(mappedBy = "sloshBot")
+  private Set<OrderHistory> orderHistory;
+  @OneToMany(mappedBy = "sloshBot")
+  private Set<Optic> optics;
+
+  //region constructors
   public SloshBot(String name, int ownerId, String createdBy) {
     this.name = name;
     this.ownerId = ownerId;
@@ -32,7 +43,16 @@ public class SloshBot {
     this.createdDate = new Timestamp(DateTime.now().getMillis());
   }
 
+  public SloshBot(String name, String createdBy, User owner) {
+    this.name = name;
+    this.ownerId = owner.getId();
+    this.createdBy = createdBy;
+    this.createdDate = new Timestamp(DateTime.now().getMillis());
+    this.owner = owner;
+  }
+
   public SloshBot(){}
+  //endregion
 
   //region getters and setters
   public int getId() {
@@ -89,6 +109,30 @@ public class SloshBot {
 
   public void setModifiedDate(Timestamp modifiedDate) {
     this.modifiedDate = modifiedDate;
+  }
+
+  public User getOwner() {
+    return owner;
+  }
+
+  public void setOwner(User owner) {
+    this.owner = owner;
+  }
+
+  public Set<OrderHistory> getOrderHistory() {
+    return orderHistory;
+  }
+
+  public void setOrderHistory(Set<OrderHistory> orderHistory) {
+    this.orderHistory = orderHistory;
+  }
+
+  public Set<Optic> getOptics() {
+    return optics;
+  }
+
+  public void setOptics(Set<Optic> optics) {
+    this.optics = optics;
   }
   //endregion
 }

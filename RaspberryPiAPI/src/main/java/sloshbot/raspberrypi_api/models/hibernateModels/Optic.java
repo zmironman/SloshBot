@@ -1,13 +1,14 @@
-package sloshbot.raspberrypi_api.models;
+package sloshbot.raspberrypi_api.models.hibernateModels;
 
 import org.joda.time.DateTime;
+import sloshbot.raspberrypi_api.models.HibernatePOJO;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "Optic")
-public class Optic {
+public class Optic extends HibernatePOJO {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +32,14 @@ public class Optic {
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
 
+  @ManyToOne
+  @JoinColumn(name = "ingredientId")
+  private Ingredient ingredient;
+  @ManyToOne
+  @JoinColumn(name = "sloshBotId")
+  private SloshBot sloshBot;
+
+  //region constructors
   public Optic(int ingredientId, int distanceFromHome, int remainingLiquid, int pinNumber, int sloshBotId, String createdBy) {
     this.ingredientId = ingredientId;
     this.distanceFromHome = distanceFromHome;
@@ -41,7 +50,20 @@ public class Optic {
     this.createdDate = new Timestamp(DateTime.now().getMillis());
   }
 
+  public Optic(int distanceFromHome, int remainingLiquid, int pinNumber, String createdBy, Ingredient ingredient, SloshBot sloshBot) {
+    this.ingredientId = ingredient.getId();
+    this.sloshBotId = sloshBot.getId();
+    this.distanceFromHome = distanceFromHome;
+    this.remainingLiquid = remainingLiquid;
+    this.pinNumber = pinNumber;
+    this.createdBy = createdBy;
+    this.createdDate = new Timestamp(DateTime.now().getMillis());
+    this.ingredient = ingredient;
+    this.sloshBot = sloshBot;
+  }
+
   public Optic(){}
+  //endregion
 
   //region getters and setters
   public int getId() {

@@ -1,13 +1,14 @@
-package sloshbot.raspberrypi_api.models;
+package sloshbot.raspberrypi_api.models.hibernateModels;
 
 import org.joda.time.DateTime;
+import sloshbot.raspberrypi_api.models.HibernatePOJO;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "RecipeIngredients")
-public class RecipeIngredients {
+public class RecipeIngredients extends HibernatePOJO {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +27,14 @@ public class RecipeIngredients {
   private String modifiedBy;
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
+  @ManyToOne
+  @JoinColumn(name = "recipeId")
+  private Recipe recipe;
+  @ManyToOne
+  @JoinColumn(name = "ingredientId")
+  private Ingredient ingredient;
 
+  //region constructors
   public RecipeIngredients(int recipeId, int ingredientId, int amount, String createdBy) {
     this.recipeId = recipeId;
     this.ingredientId = ingredientId;
@@ -35,7 +43,18 @@ public class RecipeIngredients {
     this.createdDate = new Timestamp(DateTime.now().getMillis());
   }
 
+  public RecipeIngredients(int amount, String createdBy, Recipe recipe, Ingredient ingredient) {
+    this.recipeId = recipe.getId();
+    this.ingredientId = ingredient.getId();
+    this.amount = amount;
+    this.createdBy = createdBy;
+    this.createdDate = new Timestamp(DateTime.now().getMillis());
+    this.recipe = recipe;
+    this.ingredient = ingredient;
+  }
+
   public RecipeIngredients(){}
+  //endregion
 
   //region getters and setters
   public int getId() {
@@ -100,6 +119,22 @@ public class RecipeIngredients {
 
   public void setModifiedDate(Timestamp modifiedDate) {
     this.modifiedDate = modifiedDate;
+  }
+
+  public Recipe getRecipe() {
+    return recipe;
+  }
+
+  public void setRecipe(Recipe recipe) {
+    this.recipe = recipe;
+  }
+
+  public Ingredient getIngredient() {
+    return ingredient;
+  }
+
+  public void setIngredient(Ingredient ingredient) {
+    this.ingredient = ingredient;
   }
   //endregion
 }

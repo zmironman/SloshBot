@@ -1,11 +1,8 @@
 package sloshbot.raspberrypi_api.controllers;
 
 import java.sql.Timestamp;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
-import java.sql.Timestamp;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +12,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import sloshbot.raspberrypi_api.models.Clearancelevel;
-import sloshbot.raspberrypi_api.models.User;
+import sloshbot.raspberrypi_api.models.hibernateModels.ClearanceLevel;
+import sloshbot.raspberrypi_api.models.hibernateModels.User;
 import sloshbot.raspberrypi_api.payloads.requests.LoginRequest;
 import sloshbot.raspberrypi_api.payloads.requests.SignupRequest;
 import sloshbot.raspberrypi_api.payloads.responses.JwtResponse;
@@ -94,10 +87,10 @@ public class AuthController {
                 encoder.encode(signUpRequest.getPassword()));
 
         if(signUpRequest.getRole() != null){
-            user.setClearanceLevel(new Clearancelevel(signUpRequest.getRole()));
+            user.setClearanceLevel(new ClearanceLevel(signUpRequest.getRole()));
         }
         else{
-            user.setClearanceLevel(new Clearancelevel());
+            user.setClearanceLevel(new ClearanceLevel());
         }
 
         user.setCreatedDate(new Timestamp(DateTime.now().getMillis()));

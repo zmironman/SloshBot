@@ -1,13 +1,14 @@
-package sloshbot.raspberrypi_api.models;
+package sloshbot.raspberrypi_api.models.hibernateModels;
 
 import org.joda.time.DateTime;
+import sloshbot.raspberrypi_api.models.HibernatePOJO;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "DefaultIngredients")
-public class DefaultIngredients {
+public class DefaultIngredients extends HibernatePOJO {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +27,14 @@ public class DefaultIngredients {
   private String modifiedBy;
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
+  @ManyToOne
+  @JoinColumn(name="drinkTypeID")
+  private DrinkType drinkType;
+  @ManyToOne
+  @JoinColumn(name="ingredientTypeId")
+  private IngredientType ingredientType;
 
+  //region constructors
   public DefaultIngredients(int drinkTypeId, int ingredientTypeId, int amount, String createdBy) {
     this.drinkTypeId = drinkTypeId;
     this.ingredientTypeId = ingredientTypeId;
@@ -35,7 +43,18 @@ public class DefaultIngredients {
     this.createdDate = new Timestamp(DateTime.now().getMillis());
   }
 
+  public DefaultIngredients(int amount, String createdBy, DrinkType drinkType, IngredientType ingredientType) {
+    this.drinkTypeId = drinkType.getId();
+    this.ingredientTypeId = ingredientType.getId();
+    this.amount = amount;
+    this.createdBy = createdBy;
+    this.createdDate = new Timestamp(DateTime.now().getMillis());
+    this.drinkType = drinkType;
+    this.ingredientType = ingredientType;
+  }
+
   public DefaultIngredients(){}
+  //endregion
 
   //region getters and setters
   public int getId() {
@@ -101,5 +120,22 @@ public class DefaultIngredients {
   public void setModifiedDate(Timestamp modifiedDate) {
     this.modifiedDate = modifiedDate;
   }
+
+  public DrinkType getDrinkType() {
+    return drinkType;
+  }
+
+  public void setDrinkType(DrinkType drinkType) {
+    this.drinkType = drinkType;
+  }
+
+  public IngredientType getIngredientType() {
+    return ingredientType;
+  }
+
+  public void setIngredientType(IngredientType ingredientType) {
+    this.ingredientType = ingredientType;
+  }
+
   //endregion
 }
