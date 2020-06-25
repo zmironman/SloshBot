@@ -7,16 +7,16 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "DefaultIngredients")
-public class DefaultIngredients extends HibernatePOJO {
+@Table(name = "RecipeIngredients")
+public class RecipeIngredient extends HibernatePOJO {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
-  @Column(name = "drinkTypeID", nullable = false)
-  private int drinkTypeId;
-  @Column(name = "ingredientTypeId", nullable = false)
-  private int ingredientTypeId;
+  @Column(name = "recipeId", nullable = false)
+  private int recipeId;
+  @Column(name = "ingredientId", nullable = false)
+  private int ingredientId;
   @Column(name = "amount", nullable = false)
   private int amount;
   @Column(name = "createdBy", nullable = false)
@@ -28,32 +28,32 @@ public class DefaultIngredients extends HibernatePOJO {
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
   @ManyToOne
-  @JoinColumn(name="drinkTypeID", insertable = false, updatable = false)
-  private DrinkType drinkType;
+  @JoinColumn(name = "recipeId", insertable = false, updatable = false)
+  private Recipe recipe;
   @ManyToOne
-  @JoinColumn(name="ingredientTypeId", insertable = false, updatable = false)
-  private IngredientType ingredientType;
+  @JoinColumn(name = "ingredientId", insertable = false, updatable = false)
+  private Ingredient ingredient;
 
   //region constructors
-  public DefaultIngredients(int drinkTypeId, int ingredientTypeId, int amount, String createdBy) {
-    this.drinkTypeId = drinkTypeId;
-    this.ingredientTypeId = ingredientTypeId;
+  public RecipeIngredient(int recipeId, int ingredientId, int amount, String createdBy) {
+    this.recipeId = recipeId;
+    this.ingredientId = ingredientId;
     this.amount = amount;
     this.createdBy = createdBy;
     this.createdDate = new Timestamp(DateTime.now().getMillis());
   }
 
-  public DefaultIngredients(int amount, String createdBy, DrinkType drinkType, IngredientType ingredientType) {
-    this.drinkTypeId = drinkType.getId();
-    this.ingredientTypeId = ingredientType.getId();
+  public RecipeIngredient(int amount, String createdBy, Recipe recipe, Ingredient ingredient) {
+    this.recipeId = recipe.getId();
+    this.ingredientId = ingredient.getId();
     this.amount = amount;
     this.createdBy = createdBy;
     this.createdDate = new Timestamp(DateTime.now().getMillis());
-    this.drinkType = drinkType;
-    this.ingredientType = ingredientType;
+    this.recipe = recipe;
+    this.ingredient = ingredient;
   }
 
-  public DefaultIngredients(){}
+  public RecipeIngredient(){}
   //endregion
 
   //region getters and setters
@@ -65,20 +65,20 @@ public class DefaultIngredients extends HibernatePOJO {
     this.id = id;
   }
 
-  public int getDrinkTypeId() {
-    return drinkTypeId;
+  public int getRecipeId() {
+    return recipeId;
   }
 
-  public void setDrinkTypeId(int drinkTypeId) {
-    this.drinkTypeId = drinkTypeId;
+  public void setRecipeId(int recipeId) {
+    this.recipeId = recipeId;
   }
 
-  public int getIngredientTypeId() {
-    return ingredientTypeId;
+  public int getIngredientId() {
+    return ingredientId;
   }
 
-  public void setIngredientTypeId(int ingredientTypeId) {
-    this.ingredientTypeId = ingredientTypeId;
+  public void setIngredientId(int ingredientId) {
+    this.ingredientId = ingredientId;
   }
 
   public int getAmount() {
@@ -121,21 +121,20 @@ public class DefaultIngredients extends HibernatePOJO {
     this.modifiedDate = modifiedDate;
   }
 
-  public DrinkType getDrinkType() {
-    return drinkType;
+  public Recipe getRecipe() {
+    return recipe;
   }
 
-  public void setDrinkType(DrinkType drinkType) {
-    this.drinkType = drinkType;
+  public void setRecipe(Recipe recipe) {
+    this.recipe = recipe;
   }
 
-  public IngredientType getIngredientType() {
-    return ingredientType;
+  public Ingredient getIngredient() {
+    return ingredient;
   }
 
-  public void setIngredientType(IngredientType ingredientType) {
-    this.ingredientType = ingredientType;
+  public void setIngredient(Ingredient ingredient) {
+    this.ingredient = ingredient;
   }
-
   //endregion
 }

@@ -32,7 +32,7 @@ public class Recipe extends HibernatePOJO {
   @JoinColumn(name="drinkTypeId", insertable = false, updatable = false)
   private DrinkType drinkType;
   @OneToMany(mappedBy = "recipe")
-  private Set<RecipeIngredients> recipeIngredients;
+  private Set<RecipeIngredient> recipeIngredients;
   @OneToMany(mappedBy = "recipe")
   private Set<OrderHistory> orderHistory;
 
@@ -44,7 +44,7 @@ public class Recipe extends HibernatePOJO {
     this.createdDate = new Timestamp(DateTime.now().getMillis());
   }
 
-  public Recipe(String name, String createdBy, DrinkType drinkType, Set<RecipeIngredients> recipeIngredients) {
+  public Recipe(String name, String createdBy, DrinkType drinkType, Set<RecipeIngredient> recipeIngredients) {
     this.name = name;
     this.drinkTypeId = drinkType.getId();
     this.createdBy = createdBy;
@@ -133,11 +133,11 @@ public class Recipe extends HibernatePOJO {
     this.drinkType = drinkType;
   }
 
-  public Set<RecipeIngredients> getRecipeIngredients() {
+  public Set<RecipeIngredient> getRecipeIngredients() {
     return recipeIngredients;
   }
 
-  public void setRecipeIngredients(Set<RecipeIngredients> recipeIngredients) {
+  public void setRecipeIngredients(Set<RecipeIngredient> recipeIngredients) {
     this.recipeIngredients = recipeIngredients;
   }
 

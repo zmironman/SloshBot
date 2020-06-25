@@ -25,7 +25,7 @@ public class IngredientType extends HibernatePOJO {
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
   @OneToMany(mappedBy = "ingredientType")
-  private Set<DefaultIngredients> defaultIngredients;
+  private Set<DefaultIngredient> defaultIngredients;
   @OneToMany(mappedBy ="ingredientType")
   private Set<Ingredient> ingredients;
 
@@ -88,11 +88,11 @@ public class IngredientType extends HibernatePOJO {
     this.modifiedDate = modifiedDate;
   }
 
-  public Set<DefaultIngredients> getDefaultIngredients() {
+  public Set<DefaultIngredient> getDefaultIngredients() {
     return defaultIngredients;
   }
 
-  public void setDefaultIngredients(Set<DefaultIngredients> defaultIngredients) {
+  public void setDefaultIngredients(Set<DefaultIngredient> defaultIngredients) {
     this.defaultIngredients = defaultIngredients;
   }
 

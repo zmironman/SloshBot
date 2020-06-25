@@ -7,16 +7,16 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "RecipeIngredients")
-public class RecipeIngredients extends HibernatePOJO {
+@Table(name = "DefaultIngredients")
+public class DefaultIngredient extends HibernatePOJO {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
-  @Column(name = "recipeId", nullable = false)
-  private int recipeId;
-  @Column(name = "ingredientId", nullable = false)
-  private int ingredientId;
+  @Column(name = "drinkTypeID", nullable = false)
+  private int drinkTypeId;
+  @Column(name = "ingredientTypeId", nullable = false)
+  private int ingredientTypeId;
   @Column(name = "amount", nullable = false)
   private int amount;
   @Column(name = "createdBy", nullable = false)
@@ -28,32 +28,32 @@ public class RecipeIngredients extends HibernatePOJO {
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
   @ManyToOne
-  @JoinColumn(name = "recipeId", insertable = false, updatable = false)
-  private Recipe recipe;
+  @JoinColumn(name="drinkTypeID", insertable = false, updatable = false)
+  private DrinkType drinkType;
   @ManyToOne
-  @JoinColumn(name = "ingredientId", insertable = false, updatable = false)
-  private Ingredient ingredient;
+  @JoinColumn(name="ingredientTypeId", insertable = false, updatable = false)
+  private IngredientType ingredientType;
 
   //region constructors
-  public RecipeIngredients(int recipeId, int ingredientId, int amount, String createdBy) {
-    this.recipeId = recipeId;
-    this.ingredientId = ingredientId;
+  public DefaultIngredient(int drinkTypeId, int ingredientTypeId, int amount, String createdBy) {
+    this.drinkTypeId = drinkTypeId;
+    this.ingredientTypeId = ingredientTypeId;
     this.amount = amount;
     this.createdBy = createdBy;
     this.createdDate = new Timestamp(DateTime.now().getMillis());
   }
 
-  public RecipeIngredients(int amount, String createdBy, Recipe recipe, Ingredient ingredient) {
-    this.recipeId = recipe.getId();
-    this.ingredientId = ingredient.getId();
+  public DefaultIngredient(int amount, String createdBy, DrinkType drinkType, IngredientType ingredientType) {
+    this.drinkTypeId = drinkType.getId();
+    this.ingredientTypeId = ingredientType.getId();
     this.amount = amount;
     this.createdBy = createdBy;
     this.createdDate = new Timestamp(DateTime.now().getMillis());
-    this.recipe = recipe;
-    this.ingredient = ingredient;
+    this.drinkType = drinkType;
+    this.ingredientType = ingredientType;
   }
 
-  public RecipeIngredients(){}
+  public DefaultIngredient(){}
   //endregion
 
   //region getters and setters
@@ -65,20 +65,20 @@ public class RecipeIngredients extends HibernatePOJO {
     this.id = id;
   }
 
-  public int getRecipeId() {
-    return recipeId;
+  public int getDrinkTypeId() {
+    return drinkTypeId;
   }
 
-  public void setRecipeId(int recipeId) {
-    this.recipeId = recipeId;
+  public void setDrinkTypeId(int drinkTypeId) {
+    this.drinkTypeId = drinkTypeId;
   }
 
-  public int getIngredientId() {
-    return ingredientId;
+  public int getIngredientTypeId() {
+    return ingredientTypeId;
   }
 
-  public void setIngredientId(int ingredientId) {
-    this.ingredientId = ingredientId;
+  public void setIngredientTypeId(int ingredientTypeId) {
+    this.ingredientTypeId = ingredientTypeId;
   }
 
   public int getAmount() {
@@ -121,20 +121,21 @@ public class RecipeIngredients extends HibernatePOJO {
     this.modifiedDate = modifiedDate;
   }
 
-  public Recipe getRecipe() {
-    return recipe;
+  public DrinkType getDrinkType() {
+    return drinkType;
   }
 
-  public void setRecipe(Recipe recipe) {
-    this.recipe = recipe;
+  public void setDrinkType(DrinkType drinkType) {
+    this.drinkType = drinkType;
   }
 
-  public Ingredient getIngredient() {
-    return ingredient;
+  public IngredientType getIngredientType() {
+    return ingredientType;
   }
 
-  public void setIngredient(Ingredient ingredient) {
-    this.ingredient = ingredient;
+  public void setIngredientType(IngredientType ingredientType) {
+    this.ingredientType = ingredientType;
   }
+
   //endregion
 }

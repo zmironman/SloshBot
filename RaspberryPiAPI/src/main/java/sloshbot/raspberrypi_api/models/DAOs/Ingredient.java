@@ -34,7 +34,7 @@ public class Ingredient extends HibernatePOJO {
   @JoinColumn(name="ingredientTypeId", insertable = false, updatable = false)
   private IngredientType ingredientType;
   @OneToMany(mappedBy = "ingredient")
-  private Set<RecipeIngredients> recipeIngredients;
+  private Set<RecipeIngredient> recipeIngredients;
   @OneToMany(mappedBy = "ingredient")
   private Set<Optic> optics;
 
@@ -142,11 +142,11 @@ public class Ingredient extends HibernatePOJO {
     this.ingredientType = ingredientType;
   }
 
-  public Set<RecipeIngredients> getRecipeIngredients() {
+  public Set<RecipeIngredient> getRecipeIngredients() {
     return recipeIngredients;
   }
 
-  public void setRecipeIngredients(Set<RecipeIngredients> recipeIngredients) {
+  public void setRecipeIngredients(Set<RecipeIngredient> recipeIngredients) {
     this.recipeIngredients = recipeIngredients;
   }
 
