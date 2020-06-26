@@ -1,7 +1,6 @@
 package sloshbot.raspberrypi_api.models.DAOs;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import sloshbot.raspberrypi_api.models.HibernatePOJO;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -9,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "User")
-public class User extends HibernatePOJO {
+public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

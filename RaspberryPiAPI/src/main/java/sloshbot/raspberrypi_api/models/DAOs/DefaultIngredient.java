@@ -2,14 +2,13 @@ package sloshbot.raspberrypi_api.models.DAOs;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.joda.time.DateTime;
-import sloshbot.raspberrypi_api.models.HibernatePOJO;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "DefaultIngredients")
-public class DefaultIngredient extends HibernatePOJO {
+public class DefaultIngredient{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
