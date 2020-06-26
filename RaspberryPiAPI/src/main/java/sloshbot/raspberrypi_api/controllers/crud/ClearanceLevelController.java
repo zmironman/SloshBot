@@ -36,7 +36,7 @@ public class ClearanceLevelController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public ResponseEntity<ClearanceLevel> getClearanceLevelById(@PathVariable(value = "id") Long clearanceLevelId)
+    public ResponseEntity<ClearanceLevel> getClearanceLevelById(@PathVariable(value = "id") int clearanceLevelId)
             throws ResourceNotFoundException {
         ClearanceLevel clearanceLevel = clearanceLevelRepository.findById(clearanceLevelId)
                 .orElseThrow(() -> new ResourceNotFoundException("ClearanceLevel not found for this id ::" + clearanceLevelId));
@@ -54,7 +54,7 @@ public class ClearanceLevelController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public ResponseEntity<ClearanceLevel> updateClearanceLevel(@PathVariable(value = "id") Long clearanceLevelId,
+    public ResponseEntity<ClearanceLevel> updateClearanceLevel(@PathVariable(value = "id") int clearanceLevelId,
                                                      @RequestBody ClearanceLevel clearanceLevelDetails)
             throws ResourceNotFoundException {
         ClearanceLevel clearanceLevel = clearanceLevelRepository.findById(clearanceLevelId)
@@ -69,7 +69,7 @@ public class ClearanceLevelController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public boolean deleteClearanceLevel(@PathVariable(value = "id") Long clearanceLevelId)
+    public boolean deleteClearanceLevel(@PathVariable(value = "id") int clearanceLevelId)
             throws ResourceNotFoundException {
         ClearanceLevel clearanceLevel = clearanceLevelRepository.findById(clearanceLevelId)
                 .orElseThrow(() -> new ResourceNotFoundException("ClearanceLevel not found for this id :: " + clearanceLevelId));

@@ -28,7 +28,7 @@ public class IngredientController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public ResponseEntity<Ingredient> getIngredientById(@PathVariable(value = "id") Long ingredientId)
+    public ResponseEntity<Ingredient> getIngredientById(@PathVariable(value = "id") int ingredientId)
             throws ResourceNotFoundException {
         Ingredient ingredient = ingredientRepository.findById(ingredientId)
                 .orElseThrow(() -> new ResourceNotFoundException("Ingredient not found for this id ::" + ingredientId));
@@ -46,7 +46,7 @@ public class IngredientController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public ResponseEntity<Ingredient> updateIngredient(@PathVariable(value = "id") Long ingredientId,
+    public ResponseEntity<Ingredient> updateIngredient(@PathVariable(value = "id") int ingredientId,
                                                      @RequestBody Ingredient ingredientDetails)
             throws ResourceNotFoundException {
         Ingredient ingredient = ingredientRepository.findById(ingredientId)
@@ -66,7 +66,7 @@ public class IngredientController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public boolean deleteIngredient(@PathVariable(value = "id") Long ingredientId)
+    public boolean deleteIngredient(@PathVariable(value = "id") int ingredientId)
             throws ResourceNotFoundException {
         Ingredient ingredient = ingredientRepository.findById(ingredientId)
                 .orElseThrow(() -> new ResourceNotFoundException("Ingredient not found for this id :: " + ingredientId));

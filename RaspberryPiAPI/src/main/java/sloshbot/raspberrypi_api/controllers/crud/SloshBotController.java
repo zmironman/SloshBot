@@ -28,7 +28,7 @@ public class SloshBotController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public ResponseEntity<SloshBot> getSloshBotById(@PathVariable(value = "id") Long sloshBotId)
+    public ResponseEntity<SloshBot> getSloshBotById(@PathVariable(value = "id") int sloshBotId)
             throws ResourceNotFoundException {
         SloshBot sloshBot = sloshBotRepository.findById(sloshBotId)
                 .orElseThrow(() -> new ResourceNotFoundException("SloshBot not found for this id ::" + sloshBotId));
@@ -46,7 +46,7 @@ public class SloshBotController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public ResponseEntity<SloshBot> updateSloshBot(@PathVariable(value = "id") Long sloshBotId,
+    public ResponseEntity<SloshBot> updateSloshBot(@PathVariable(value = "id") int sloshBotId,
                                                      @RequestBody SloshBot sloshBotDetails)
             throws ResourceNotFoundException {
         SloshBot sloshBot = sloshBotRepository.findById(sloshBotId)
@@ -64,7 +64,7 @@ public class SloshBotController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public boolean deleteSloshBot(@PathVariable(value = "id") Long sloshBotId)
+    public boolean deleteSloshBot(@PathVariable(value = "id") int sloshBotId)
             throws ResourceNotFoundException {
         SloshBot sloshBot = sloshBotRepository.findById(sloshBotId)
                 .orElseThrow(() -> new ResourceNotFoundException("SloshBot not found for this id :: " + sloshBotId));

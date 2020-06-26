@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import sloshbot.raspberrypi_api.models.DAOs.Optic;
 
 @Repository
-public interface OpticRepository extends JpaRepository<Optic, Long> {
+public interface OpticRepository extends JpaRepository<Optic, Integer> {
 }

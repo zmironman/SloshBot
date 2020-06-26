@@ -34,7 +34,7 @@ public class DrinkTypeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DrinkType> getDrinkTypeById(@PathVariable(value = "id") Long drinkTypeId)
+    public ResponseEntity<DrinkType> getDrinkTypeById(@PathVariable(value = "id") int drinkTypeId)
             throws ResourceNotFoundException {
         DrinkType drinkType = drinkTypeRepository.findById(drinkTypeId)
                 .orElseThrow(() -> new ResourceNotFoundException("DrinkType not found for this id ::" + drinkTypeId));
@@ -52,7 +52,7 @@ public class DrinkTypeController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public ResponseEntity<DrinkType> updateDrinkType(@PathVariable(value = "id") Long drinkTypeId,
+    public ResponseEntity<DrinkType> updateDrinkType(@PathVariable(value = "id") int drinkTypeId,
                                                      @RequestBody DrinkType drinkTypeDetails)
             throws ResourceNotFoundException {
         DrinkType drinkType = drinkTypeRepository.findById(drinkTypeId)
@@ -67,7 +67,7 @@ public class DrinkTypeController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public boolean deleteDrinkType(@PathVariable(value = "id") Long drinkTypeId)
+    public boolean deleteDrinkType(@PathVariable(value = "id") int drinkTypeId)
             throws ResourceNotFoundException {
         DrinkType drinkType = drinkTypeRepository.findById(drinkTypeId)
                 .orElseThrow(() -> new ResourceNotFoundException("DrinkType not found for this id :: " + drinkTypeId));

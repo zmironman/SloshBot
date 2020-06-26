@@ -28,7 +28,7 @@ public class OpticController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public ResponseEntity<Optic> getOpticById(@PathVariable(value = "id") Long opticId)
+    public ResponseEntity<Optic> getOpticById(@PathVariable(value = "id") int opticId)
             throws ResourceNotFoundException {
         Optic optic = opticRepository.findById(opticId)
                 .orElseThrow(() -> new ResourceNotFoundException("Optic not found for this id ::" + opticId));
@@ -46,7 +46,7 @@ public class OpticController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public ResponseEntity<Optic> updateOptic(@PathVariable(value = "id") Long opticId,
+    public ResponseEntity<Optic> updateOptic(@PathVariable(value = "id") int opticId,
                                                      @RequestBody Optic opticDetails)
             throws ResourceNotFoundException {
         Optic optic = opticRepository.findById(opticId)
@@ -70,7 +70,7 @@ public class OpticController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public boolean deleteOptic(@PathVariable(value = "id") Long opticId)
+    public boolean deleteOptic(@PathVariable(value = "id") int opticId)
             throws ResourceNotFoundException {
         Optic optic = opticRepository.findById(opticId)
                 .orElseThrow(() -> new ResourceNotFoundException("Optic not found for this id :: " + opticId));

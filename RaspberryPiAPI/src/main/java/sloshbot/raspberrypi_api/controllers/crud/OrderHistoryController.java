@@ -28,7 +28,7 @@ public class OrderHistoryController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public ResponseEntity<OrderHistory> getOrderHistoryById(@PathVariable(value = "id") Long orderHistoryId)
+    public ResponseEntity<OrderHistory> getOrderHistoryById(@PathVariable(value = "id") int orderHistoryId)
             throws ResourceNotFoundException {
         OrderHistory orderHistory = orderHistoryRepository.findById(orderHistoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("OrderHistory not found for this id ::" + orderHistoryId));
@@ -47,7 +47,7 @@ public class OrderHistoryController {
     //This does nothing right now.  There should be no reason we would update a history record
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public ResponseEntity<OrderHistory> updateOrderHistory(@PathVariable(value = "id") Long orderHistoryId,
+    public ResponseEntity<OrderHistory> updateOrderHistory(@PathVariable(value = "id") int orderHistoryId,
                                                      @RequestBody OrderHistory orderHistoryDetails)
             throws ResourceNotFoundException {
         OrderHistory orderHistory = orderHistoryRepository.findById(orderHistoryId)
@@ -61,7 +61,7 @@ public class OrderHistoryController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public boolean deleteOrderHistory(@PathVariable(value = "id") Long orderHistoryId)
+    public boolean deleteOrderHistory(@PathVariable(value = "id") int orderHistoryId)
             throws ResourceNotFoundException {
         OrderHistory orderHistory = orderHistoryRepository.findById(orderHistoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("OrderHistory not found for this id :: " + orderHistoryId));

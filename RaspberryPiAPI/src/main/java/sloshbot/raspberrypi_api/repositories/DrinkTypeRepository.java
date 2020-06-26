@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import sloshbot.raspberrypi_api.models.DAOs.DrinkType;
 
 @Repository
-public interface DrinkTypeRepository extends JpaRepository<DrinkType, Long> {
+public interface DrinkTypeRepository extends JpaRepository<DrinkType, Integer> {
 }

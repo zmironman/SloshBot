@@ -28,7 +28,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public ResponseEntity<User> getUserById(@PathVariable(value = "id") Long userId)
+    public ResponseEntity<User> getUserById(@PathVariable(value = "id") int userId)
             throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id ::" + userId));
@@ -46,7 +46,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long userId,
+    public ResponseEntity<User> updateUser(@PathVariable(value = "id") int userId,
                                                      @RequestBody User userDetails)
             throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
@@ -64,7 +64,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('SUPERUSER')")
-    public boolean deleteUser(@PathVariable(value = "id") Long userId)
+    public boolean deleteUser(@PathVariable(value = "id") int userId)
             throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));

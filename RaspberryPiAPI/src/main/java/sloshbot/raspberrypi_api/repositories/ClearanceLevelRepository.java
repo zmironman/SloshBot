@@ -6,5 +6,5 @@ import sloshbot.raspberrypi_api.models.DAOs.ClearanceLevel;
 
 
 @Repository
-public interface ClearanceLevelRepository extends JpaRepository<ClearanceLevel, Long> {
+public interface ClearanceLevelRepository extends JpaRepository<ClearanceLevel, Integer> {
 }

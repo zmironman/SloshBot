@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import sloshbot.raspberrypi_api.models.DAOs.RecipeIngredient;
 
 @Repository
-public interface RecipeIngredientRepository extends JpaRepository<RecipeIngredient, Long> {
+public interface RecipeIngredientRepository extends JpaRepository<RecipeIngredient, Integer> {
 }
