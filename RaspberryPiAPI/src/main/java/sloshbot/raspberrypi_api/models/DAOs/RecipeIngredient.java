@@ -1,5 +1,6 @@
 package sloshbot.raspberrypi_api.models.DAOs;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.joda.time.DateTime;
 import sloshbot.raspberrypi_api.models.HibernatePOJO;
 
@@ -13,18 +14,24 @@ public class RecipeIngredient extends HibernatePOJO {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
+  @JsonIgnore
   @Column(name = "recipeId", nullable = false)
   private int recipeId;
+  @JsonIgnore
   @Column(name = "ingredientId", nullable = false)
   private int ingredientId;
   @Column(name = "amount", nullable = false)
   private int amount;
+  @JsonIgnore
   @Column(name = "createdBy", nullable = false)
   private String createdBy;
+  @JsonIgnore
   @Column(name = "createdDate", nullable = false)
   private Timestamp createdDate;
+  @JsonIgnore
   @Column(name = "modifiedBy")
   private String modifiedBy;
+  @JsonIgnore
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
   @ManyToOne

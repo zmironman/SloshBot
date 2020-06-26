@@ -1,4 +1,4 @@
-package sloshbot.raspberrypi_api.payloads.responses;
+package sloshbot.raspberrypi_api.models.payloads.responses.auth;
 
 import java.util.List;
 

@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.*;
 
 import sloshbot.raspberrypi_api.models.DAOs.ClearanceLevel;
 import sloshbot.raspberrypi_api.models.DAOs.User;
-import sloshbot.raspberrypi_api.payloads.requests.LoginRequest;
-import sloshbot.raspberrypi_api.payloads.requests.SignupRequest;
-import sloshbot.raspberrypi_api.payloads.responses.JwtResponse;
-import sloshbot.raspberrypi_api.payloads.responses.MessageResponse;
+import sloshbot.raspberrypi_api.models.payloads.requests.auth.LoginRequest;
+import sloshbot.raspberrypi_api.models.payloads.requests.auth.SignupRequest;
+import sloshbot.raspberrypi_api.models.payloads.responses.auth.JwtResponse;
+import sloshbot.raspberrypi_api.models.payloads.responses.auth.MessageResponse;
 import sloshbot.raspberrypi_api.repositories.ClearanceLevelRepository;
 import sloshbot.raspberrypi_api.repositories.UserRepository;
 import sloshbot.raspberrypi_api.security.jwt.JwtUtils;

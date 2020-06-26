@@ -1,5 +1,6 @@
 package sloshbot.raspberrypi_api.models.DAOs;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.joda.time.DateTime;
 import sloshbot.raspberrypi_api.models.HibernatePOJO;
 
@@ -23,18 +24,23 @@ public class Optic extends HibernatePOJO {
   private int pinNumber;
   @Column(name = "sloshBotId", nullable = false)
   private int sloshBotId;
+  @JsonIgnore
   @Column(name = "createdBy", nullable = false)
   private String createdBy;
+  @JsonIgnore
   @Column(name = "createdDate", nullable = false)
   private Timestamp createdDate;
+  @JsonIgnore
   @Column(name = "modifiedBy")
   private String modifiedBy;
+  @JsonIgnore
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
-
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "ingredientId", insertable = false, updatable = false)
   private Ingredient ingredient;
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "sloshBotId", insertable = false, updatable = false)
   private SloshBot sloshBot;
@@ -144,6 +150,22 @@ public class Optic extends HibernatePOJO {
 
   public void setModifiedDate(Timestamp modifiedDate) {
     this.modifiedDate = modifiedDate;
+  }
+
+  public Ingredient getIngredient() {
+    return ingredient;
+  }
+
+  public void setIngredient(Ingredient ingredient) {
+    this.ingredient = ingredient;
+  }
+
+  public SloshBot getSloshBot() {
+    return sloshBot;
+  }
+
+  public void setSloshBot(SloshBot sloshBot) {
+    this.sloshBot = sloshBot;
   }
   //endregion
 }

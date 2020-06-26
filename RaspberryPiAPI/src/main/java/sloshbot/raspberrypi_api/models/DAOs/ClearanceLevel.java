@@ -1,5 +1,6 @@
 package sloshbot.raspberrypi_api.models.DAOs;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import sloshbot.raspberrypi_api.models.HibernatePOJO;
 import sloshbot.raspberrypi_api.models.Roles;
 
@@ -17,14 +18,19 @@ public class ClearanceLevel extends HibernatePOJO {
     private int id;
     @Column(name = "role", nullable = false)
     private String role;
+    @JsonIgnore
     @Column(name = "createdBy", nullable = false)
     private String createdBy;
+    @JsonIgnore
     @Column(name = "createdDate", nullable = false)
     private Timestamp createdDate;
+    @JsonIgnore
     @Column(name = "modifiedBy")
     private String modifiedBy;
+    @JsonIgnore
     @Column(name = "modifiedDate")
     private Timestamp modifiedDate;
+    @JsonIgnore
     @OneToMany(mappedBy = "clearanceLevel", cascade = CascadeType.ALL)
     private Set<User> users;
 

@@ -1,5 +1,6 @@
 package sloshbot.raspberrypi_api.models.DAOs;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import sloshbot.raspberrypi_api.models.HibernatePOJO;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class User extends HibernatePOJO {
   private String name;
   @Column(name = "username", nullable = false)
   private String username;
+  @JsonIgnore
   @Column(name = "password", nullable = false)
   private String password;
   @Column(name = "email", nullable = false)
@@ -24,14 +26,19 @@ public class User extends HibernatePOJO {
   @ManyToOne
   @JoinColumn(name="clearanceLevel")
   private ClearanceLevel clearanceLevel;
+  @JsonIgnore
   @Column(name = "createdDate", nullable = false)
   private Timestamp createdDate;
+  @JsonIgnore
   @Column(name = "modifiedBy")
   private String modifiedBy;
+  @JsonIgnore
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
+  @JsonIgnore
   @OneToMany(mappedBy = "user")
   private Set<OrderHistory> orderHistory;
+  @JsonIgnore
   @OneToMany(mappedBy = "owner")
   private Set<SloshBot> sloshBots;
 

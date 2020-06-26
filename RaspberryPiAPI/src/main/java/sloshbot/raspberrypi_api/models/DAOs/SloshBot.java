@@ -1,5 +1,6 @@
 package sloshbot.raspberrypi_api.models.DAOs;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.joda.time.DateTime;
 import sloshbot.raspberrypi_api.models.HibernatePOJO;
 
@@ -11,6 +12,7 @@ import java.util.Set;
 @Table(name = "SloshBot")
 public class SloshBot extends HibernatePOJO {
 
+  @JsonIgnore
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
@@ -18,20 +20,28 @@ public class SloshBot extends HibernatePOJO {
   private String name;
   @Column(name = "ownerId", nullable = false)
   private int ownerId;
+  @JsonIgnore
   @Column(name = "createdBy", nullable = false)
   private String createdBy;
+  @JsonIgnore
   @Column(name = "createdDate", nullable = false)
   private Timestamp createdDate;
+  @JsonIgnore
   @Column(name = "modifiedBy")
   private String modifiedBy;
+  @JsonIgnore
   @Column(name = "modifiedDate")
   private Timestamp modifiedDate;
 
+
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "ownerId", insertable = false, updatable = false)
   private User owner;
+  @JsonIgnore
   @OneToMany(mappedBy = "sloshBot")
   private Set<OrderHistory> orderHistory;
+  @JsonIgnore
   @OneToMany(mappedBy = "sloshBot")
   private Set<Optic> optics;
 

@@ -1,4 +1,4 @@
-package sloshbot.raspberrypi_api.payloads.responses;
+package sloshbot.raspberrypi_api.models.payloads.responses.auth;
 
 public class MessageResponse {
     private String message;

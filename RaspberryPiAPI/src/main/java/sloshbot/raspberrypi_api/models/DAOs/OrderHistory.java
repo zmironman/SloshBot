@@ -1,5 +1,6 @@
 package sloshbot.raspberrypi_api.models.DAOs;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.joda.time.DateTime;
 import sloshbot.raspberrypi_api.models.HibernatePOJO;
 
@@ -19,14 +20,18 @@ public class OrderHistory extends HibernatePOJO {
   private int userId;
   @Column(name = "sloshBotId", nullable = false)
   private int sloshBotId;
+  @JsonIgnore
   @Column(name = "createdDate", nullable = false)
   private Timestamp createdDate;
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "recipeId", insertable = false, updatable = false)
   private Recipe recipe;
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "userId", insertable = false, updatable = false)
   private User user;
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "sloshBotId", insertable = false, updatable = false)
   private SloshBot sloshBot;
