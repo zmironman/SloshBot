@@ -167,5 +167,13 @@ public class Ingredient{
     this.optics = optics;
   }
 
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
+
   //endregion
 }
