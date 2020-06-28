@@ -1,4 +1,4 @@
-package sloshbot.raspberrypi_api.models.payloads.requests.auth;
+package sloshbot.raspberrypi_api.models.payloads.requests;
 
 public class SignupRequest {
     private String name;

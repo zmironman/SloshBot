@@ -39,7 +39,6 @@ public class OrderHistoryController {
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('SUPERUSER')")
     public OrderHistory createOrderHistory(@RequestBody OrderHistory orderHistory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        orderHistory.setCreatedBy(authentication.getName());
         orderHistory.setCreatedDate(new Timestamp(DateTime.now().getMillis()));
         return orderHistoryRepository.save(orderHistory);
     }
@@ -52,9 +51,6 @@ public class OrderHistoryController {
             throws ResourceNotFoundException {
         OrderHistory orderHistory = orderHistoryRepository.findById(orderHistoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("OrderHistory not found for this id ::" + orderHistoryId));
-        orderHistory.setModifiedDate(new Timestamp(DateTime.now().getMillis()));
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        orderHistory.setModifiedBy(authentication.getName());
         final OrderHistory updatedOrderHistory = orderHistoryRepository.save(orderHistory);
         return ResponseEntity.ok(updatedOrderHistory);
     }

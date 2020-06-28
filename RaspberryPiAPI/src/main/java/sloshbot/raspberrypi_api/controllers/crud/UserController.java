@@ -38,8 +38,6 @@ public class UserController {
     @PostMapping("/add")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('SUPERUSER')")
     public User createUser(@RequestBody User user) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        user.setCreatedBy(authentication.getName());
         user.setCreatedDate(new Timestamp(DateTime.now().getMillis()));
         return userRepository.save(user);
     }

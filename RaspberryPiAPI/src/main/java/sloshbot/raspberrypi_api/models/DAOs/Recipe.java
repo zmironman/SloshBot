@@ -37,7 +37,7 @@ public class Recipe {
   @JoinColumn(name="drinkTypeId", insertable = false, updatable = false)
   private DrinkType drinkType;
   @JsonIgnore
-  @OneToMany(mappedBy = "recipe")
+  @OneToMany(mappedBy = "recipe", fetch = FetchType.EAGER)
   private Set<RecipeIngredient> recipeIngredients;
   @JsonIgnore
   @OneToMany(mappedBy = "recipe")
