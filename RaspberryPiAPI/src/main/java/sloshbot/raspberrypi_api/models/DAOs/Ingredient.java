@@ -22,6 +22,8 @@ public class Ingredient{
   private int alcoholContent;
   @Column(name = "price")
   private int price;
+  @Column(name = "imageUrl")
+  private String imageUrl;
   @JsonIgnore
   @Column(name = "createdBy",nullable = false)
   private String createdBy;

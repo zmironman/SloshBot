@@ -19,6 +19,7 @@ create table Ingredient
         on update cascade,
 	alcoholContent int not null,
 	price int,
+	imageUrl nvarchar(2048),
 	createdBy nvarchar(100) not null,
 	createdDate datetime not null,
 	modifiedBy nvarchar(100) null,
@@ -166,10 +167,3 @@ create table OrderHistory(
         on update cascade,
     createdDate datetime not null
 );
-
-insert into clearancelevel (id, role, createdBy, createdDate) values
-(0, 'GUEST', 'Admin', now()),
-(1, 'USER', 'Admin', now()),
-(2, 'MODERATOR', 'Admin', now()),
-(3, 'ADMIN', 'Admin', now()),
-(4, 'SUPERUSER', 'Admin', now());

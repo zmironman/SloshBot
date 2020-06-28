@@ -7,6 +7,8 @@ delete from recipe where id > 0;
 delete from defaultingredients where id > 0;
 delete from drinktype where id > 0;
 delete from ingredienttype where id > 0;
+delete from user where id > 0;
+delete from clearancelevel where id > -1;
 
 ALTER TABLE orderhistory AUTO_INCREMENT = 1;
 ALTER TABLE optic AUTO_INCREMENT = 1;
@@ -17,3 +19,17 @@ ALTER TABLE recipe AUTO_INCREMENT = 1;
 ALTER TABLE defaultingredients AUTO_INCREMENT = 1;
 ALTER TABLE drinktype AUTO_INCREMENT = 1;
 ALTER TABLE ingredienttype AUTO_INCREMENT = 1;
+ALTER TABLE user AUTO_INCREMENT = 1;
+ALTER TABLE clearancelevel AUTO_INCREMENT = 1;
+
+drop table orderhistory;
+drop table optic;
+drop table sloshbot;
+drop table recipeingredients;
+drop table ingredient;
+drop table recipe;
+drop table defaultingredients;
+drop table drinktype;
+drop table ingredienttype;
+drop table user;
+drop table clearancelevel;
