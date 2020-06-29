@@ -1,9 +1,8 @@
-package sloshbot.raspberrypi_api.models.payloads.responses;
+package sloshbot.raspberrypi_api.models.payloads.responses.robot;
 
-public class MakeDrinkResponse {
+public class MakeDrinkResponse extends RobotResponse {
     private int currentPosition;
     private String drinkName;
-    private String message;
 
     public int getCurrentPosition() {
         return currentPosition;
@@ -19,13 +18,5 @@ public class MakeDrinkResponse {
 
     public void setDrinkName(String drinkName) {
         this.drinkName = drinkName;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 }

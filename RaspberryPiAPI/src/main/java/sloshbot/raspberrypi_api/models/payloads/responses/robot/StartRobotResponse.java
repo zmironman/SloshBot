@@ -1,6 +1,6 @@
-package sloshbot.raspberrypi_api.models.payloads.responses;
+package sloshbot.raspberrypi_api.models.payloads.responses.robot;
 
-public class StopRobotResponse {
+public class StartRobotResponse extends RobotResponse {
     private int successfulDrinksMade;
     private int failedDrinksMade;
     private int drinksLostInProgress;
