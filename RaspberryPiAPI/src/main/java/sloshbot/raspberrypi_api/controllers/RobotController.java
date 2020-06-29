@@ -62,6 +62,9 @@ public class RobotController {
         if (!started) {
             response.setMessage("Robot not started, please talk to an admin.");
             return ResponseEntity.ok().body(response);
+        }else if (drinkQueue.isEmpty()) {
+            response.setMessage("Robot does not have a drink to make.  Please wait.");
+            return ResponseEntity.ok().body(response);
         }
         response.setQueueSize(drinkQueue.size());
         response.setQueue(drinkQueue);
@@ -75,14 +78,14 @@ public class RobotController {
         startNextDrink = true;
         while (started) {
             if (!drinkQueue.isEmpty() && startNextDrink) {
-                System.out.println("Starting to make a drink");
+                print("Starting to make a drink");
                 makingDrink = true;
                 if (makeDrink()) {
                     successfulDrinksMade++;
-                    System.out.println("Successfully finished making a drink");
+                    print("Successfully finished making a drink");
                 } else {
                     failedDrinksMade++;
-                    System.out.println("Failed making a drink");
+                    print("Failed making a drink");
                 }
                 makingDrink = false;
             }
@@ -135,8 +138,11 @@ public class RobotController {
             response.setMessage("Robot not started, please talk to an admin.");
             return ResponseEntity.ok().body(response);
         }
-        if (makingDrink) {
+        else if (makingDrink) {
             response.setMessage("Robot is currently making a drink.  Please wait.");
+            return ResponseEntity.ok().body(response);
+        }else if (drinkQueue.isEmpty()) {
+            response.setMessage("Robot does not have a drink to make.  Please wait.");
             return ResponseEntity.ok().body(response);
         }
         startNextDrink = true;
@@ -149,13 +155,12 @@ public class RobotController {
 
     //region Private Methods
     private void initialize() {
-        System.out.println("Entering: initializeOpticPins");
+        print("Initializing Optics");
 //        for(Optic optic : opticRepository.findAll()){
 //            GpioPinDigitalOutput opticPin = gpio.provisionDigitalOutputPin(RaspiPin.getPinByAddress(optic.getPinNumber()), optic.getIngredient().getName(), PinState.HIGH);
 //            opticPins.add(opticPin);
 //        }
         started = true;
-        System.out.println("Exiting: initializeOpticPins");
     }
 
     private boolean makeDrink() {
@@ -176,12 +181,13 @@ public class RobotController {
             goHome();
             return true;
         } catch (Exception e) {
-            System.out.println("Exiting failed: makeDrink \n" + e.toString());
+            print("Exiting failed: makeDrink \n" + e.toString());
             return false;
         }
     }
 
     private int goHome() {
+        print("Going home");
         int distance = 0;
 //        while (homePin.getState() != PinState.HIGH) {
 //            step();
@@ -191,7 +197,7 @@ public class RobotController {
     }
 
     private void pourLiquid(RecipeIngredient recipeIngredient, Optic optic) {
-        System.out.println("Pouring " + recipeIngredient.getIngredient().getName() + " from pinNumber: " + optic.getPinNumber());
+        print("Pouring " + recipeIngredient.getIngredient().getName() + " from pinNumber: " + optic.getPinNumber());
 //        GpioPinDigitalOutput opticPin = opticPins.stream().filter(pin -> pinNumber == (pin.getPin().getAddress())).findAny().orElse(null);
 //        opticPin.low();
 //        for (int i = 0; i < amount; i++)
@@ -200,7 +206,7 @@ public class RobotController {
         try {
             delayMillis(recipeIngredient.getAmount() * 1000);
         } catch (Exception e) {
-            System.out.println("SOMETHING FUCKED UP");
+            print("SOMETHING FUCKED UP");
         }
     }
 
@@ -216,11 +222,11 @@ public class RobotController {
 //        for (int i = 0; i < distance; i++) {
 //            step();
 //        }
-        System.out.println("Moving from position " + from + " to position " + to);
+        print("Moving from position " + from + " to position " + to);
         try {
             delayMillis(distance * 50);
         } catch (Exception e) {
-            System.out.println("Something fucked up");
+            print("Something fucked up");
         }
     }
 
@@ -237,7 +243,7 @@ public class RobotController {
         do {
             end = System.nanoTime();
         } while (start + time >= end);
-        System.out.println(end - start);
+        print(end - start);
     }
 
     private void delayMillis(long time) throws InterruptedException {
@@ -252,7 +258,7 @@ public class RobotController {
         do {
             end = System.nanoTime();
         } while (start + INTERVAL >= end);
-        System.out.println(end - start);
+        print(end - start);
     }
 
     private ResponseEntity<SetOpticDistanceResponse> getSetOpticDistanceResponse(SetOpticDistanceResponse response, int distanceFromHome, Optic optic) {
@@ -265,6 +271,10 @@ public class RobotController {
         opticRepository.save(optic);
         response.setSuccess(true);
         return ResponseEntity.ok().body(response);
+    }
+
+    private void print(Object s){
+       System.out.println("--------" + s);
     }
     //endregion
 }
