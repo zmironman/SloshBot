@@ -11,6 +11,7 @@ import sloshbot.raspberrypi_api.models.payloads.requests.MakeDrinkRequest;
 import sloshbot.raspberrypi_api.models.payloads.responses.MakeDrinkResponse;
 import sloshbot.raspberrypi_api.models.payloads.responses.SetOpticDistanceResponse;
 import sloshbot.raspberrypi_api.models.payloads.responses.StartRobotResponse;
+import sloshbot.raspberrypi_api.models.payloads.responses.StopRobotResponse;
 import sloshbot.raspberrypi_api.repositories.OpticRepository;
 import sloshbot.raspberrypi_api.repositories.RecipeRepository;
 
@@ -44,6 +45,9 @@ public class RobotController {
     private boolean initialized = false;
     private boolean started = false;
     private boolean stopped = false;
+    private int successfulDrinksMade = 0;
+    private int failedDrinksMade = 0;
+    private int drinksLostInProgress = 0;
     private Queue<Tuple<String, Recipe>> drinkQueue = new LinkedList<>();
 
 
@@ -76,8 +80,6 @@ public class RobotController {
     @PreAuthorize("hasRole('MODERATOR')")
     public ResponseEntity<StartRobotResponse> RunBot() {
         initialize();
-        int successfulDrinksMade = 0;
-        int failedDrinksMade = 0;
         while (started) {
             if (!drinkQueue.isEmpty()) {
                 if(makeDrink())
@@ -87,7 +89,8 @@ public class RobotController {
             }
         }
         StartRobotResponse response = new StartRobotResponse();
-        response.setDrinksLostInProgress(drinkQueue.size());
+        drinksLostInProgress = drinkQueue.size();
+        response.setDrinksLostInProgress(drinksLostInProgress);
         response.setSuccessfulDrinksMade(successfulDrinksMade);
         response.setFailedDrinksMade(failedDrinksMade);
         drinkQueue = new LinkedList<>();
@@ -97,10 +100,14 @@ public class RobotController {
 
     @GetMapping("/stop")
     @PreAuthorize("hasRole('MODERATOR')")
-    public ResponseEntity<Boolean> StopBot() {
+    public ResponseEntity<StopRobotResponse> StopBot() {
         started = false;
         while (!stopped);
-        return ResponseEntity.ok().body(stopped);
+        StopRobotResponse response = new StopRobotResponse();
+        response.setDrinksLostInProgress(drinksLostInProgress);
+        response.setFailedDrinksMade(failedDrinksMade);
+        response.setSuccessfulDrinksMade(successfulDrinksMade);
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/setopticdistance")
