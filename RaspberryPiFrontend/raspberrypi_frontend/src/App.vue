@@ -1,20 +1,28 @@
 <template>
   <div id="app">
-    <Header/>
+    <component :is="layout">
     <div class="container">
       <div class="wrapper">
         <router-view/>
       </div>
     </div>
     <Footer/>
+    </component>
   </div>
 </template>
 
 <script>
-  import Header from "./components/Header";
-  import Footer from "./components/Footer";
+  import Footer from "./components/Shared/Footer";
+
+  const default_layout = 'default';
+
   export default {
-    components: {Footer, Header}
+    components: {Footer},
+    computed: {
+      layout() {
+        return (this.$route.meta.layout || default_layout) + '-layout';
+      }
+    }
   }
 </script>
 

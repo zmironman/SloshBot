@@ -1,29 +1,68 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Vue from 'vue';
+import {store} from '../store/index';
+import VueRouter from 'vue-router';
+import Home from '../views/Home.vue';
+import Login from "../views/Login";
+
 
 Vue.use(VueRouter)
 
-  const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
-
-const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
+let router = new VueRouter({
+    mode: 'hash',
+    base: process.env.BASE_URL,
+    routes: [
+        {
+            path: '/',
+            name: 'Home',
+            component: Home,
+            meta: {
+                title: 'Home',
+                requiresAuth: true,
+            }
+        },
+        {
+            path: '/login',
+            name: 'Login',
+            component: Login,
+            meta: {
+                title: 'Login',
+                requiresAuth: false,
+                layout: 'no-header'
+            }
+        },
+        {
+            path: '/register',
+            name: 'Register',
+            component: () => import("../views/Register"),
+            meta: {
+                title: 'Register',
+                requiresAuth: false,
+                layout: 'no-header'
+            }
+        },
+        {
+            path: '/profile',
+            name: 'Profile',
+            component: () => import("../views/Profile"),
+            meta: {
+                title: 'My Profile',
+                requiresAuth: true
+            }
+        }
+    ]
 })
 
-export default router
+router.beforeEach((to, from, next) => {
+    document.title = to.meta.title;
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (!store.getters.isAuthenticated) {
+            next({path: '/login', params: {nextUrl: to.fullPath}})
+        }
+        else
+            next();
+    }
+    else
+        next();
+});
+
+export default router;
