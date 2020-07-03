@@ -56,7 +56,4 @@
 </script>
 
 <style scoped lang="scss">
-    .headerContainer {
-
-    }
 </style>

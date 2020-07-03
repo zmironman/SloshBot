@@ -40,9 +40,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-primary btn-block" :disabled="loading">
+                    <button class="btn btn-outline-primary btn-block" :disabled="loading">
                         <span v-show="loading" class="spinner-border spinner-border-sm"></span>
-                        <span>Login</span>
+                        <span v-show="!loading">Login</span>
+                    </button>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-outline-primary btn-block" :disabled="loading" @click.prevent="$router.push('/register')">
+                        <span>Register</span>
                     </button>
                 </div>
                 <div class="form-group">
@@ -87,28 +92,29 @@
                         this.loading = false;
                         return;
                     }
-
                     if (this.user.username && this.user.password) {
-                        AuthService.login(this.user)
-                            .then(function (response) {
-                                store.commit("setUser", response);
-                                store.commit("setAccess", response.accessLevel);
-                                console.log("ROLES" + response.accessLevel)
-                                Router.push("/");
-                            })
-                            .catch(function (error) {
-                                if (error.response) {
-                                    console.log(error.response.data);
-                                    console.log(error.response.status);
-                                    console.log(error.response.headers);
-                                }
-                                if(error.response.status == 401){
-                                    alert("Unauthorized.  Username or Password may be bad.")
-                                }
-                            });
-                        this.loading = false;
+                        this.sendLogin();
                     }
                 });
+            },
+            async sendLogin(){
+                await AuthService.login(this.user)
+                    .then(function (response) {
+                        store.commit("setUser", response);
+                        store.commit("setAccess", response.accessLevel);
+                        Router.push('/');
+                    })
+                    .catch(function (error) {
+                        if (error.response) {
+                            console.log(error.response.data);
+                            console.log(error.response.status);
+                            console.log(error.response.headers);
+                        }
+                        if(error.response.status == 401){
+                            alert("Unauthorized.  Username or Password may be bad.")
+                        }
+                    });
+                this.loading = false;
             }
         }
     };

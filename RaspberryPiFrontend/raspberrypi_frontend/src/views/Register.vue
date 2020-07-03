@@ -8,53 +8,59 @@
             />
             <form name="form" @submit.prevent="handleRegister">
                 <div v-if="!successful">
-                    <div class="form-group">
+                    <div class="form-group" id="NameFormGroup">
+                        <label for="name">Name</label>
+                        <input
+                                v-model="user.name"
+                                type="text"
+                                class="form-control"
+                                id="name"
+                        />
+                    </div>
+                    <div class="form-group" id="UsernameFormGroup">
                         <label for="username">Username</label>
                         <input
                                 v-model="user.username"
-                                v-validate="'required|min:3|max:20'"
                                 type="text"
                                 class="form-control"
                                 id="username"
                         />
-                        <div
-                                v-if="submitted && errors.has('username')"
-                                class="alert-danger"
-                        >{{errors.first('username')}}
-                        </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="EmailFormGroup">
                         <label for="email">Email</label>
                         <input
                                 v-model="user.email"
-                                v-validate="'required|email|max:50'"
                                 type="email"
                                 class="form-control"
                                 id="email"
                         />
-                        <div
-                                v-if="submitted && errors.has('email')"
-                                class="alert-danger"
-                        >{{errors.first('email')}}
-                        </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="PasswordFormGroup">
                         <label for="password">Password</label>
                         <input
                                 v-model="user.password"
-                                v-validate="'required|min:6|max:40'"
                                 type="password"
                                 class="form-control"
                                 id="password"
                         />
-                        <div
-                                v-if="submitted && errors.has('password')"
-                                class="alert-danger"
-                        >{{errors.first('password')}}
-                        </div>
                     </div>
+                    <div class="form-group" id="ConfirmPasswordFormGroup">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input
+                                v-model="confirmPasswordText"
+                                type="password"
+                                class="form-control"
+                                id="confirmPassword"
+                        />
+                    </div>
+                    <button class="btn btn-outline-primary btn-block" :disabled="loading">
+                        <span v-show="loading" class="spinner-border spinner-border-sm"></span>
+                        <span v-show="!loading">Register</span>
+                    </button>
                     <div class="form-group">
-                        <button class="btn btn-primary btn-block">Sign Up</button>
+                        <button class="btn btn-outline-danger btn-block" @click.prevent="$router.push('/login')">
+                            Cancel
+                        </button>
                     </div>
                 </div>
             </form>
@@ -71,48 +77,69 @@
 
 <script>
     import User from '../models/user';
+    import AuthService from "../services/AuthService";
+    import Router from '../router';
+    import {store} from "../store";
 
     export default {
         name: 'Register',
         data() {
             return {
+                confirmPasswordText: '',
                 user: new User('', '', ''),
                 submitted: false,
                 successful: false,
-                message: ''
+                message: '',
+                loading: false
             };
         },
-        computed: {
-            loggedIn() {
-                return this.$store.state.auth.status.loggedIn;
-            }
-        },
+        computed: {},
         mounted() {
-            if (this.loggedIn) {
-                this.$router.push('/profile');
-            }
+            return this.$store.getters.isAuthenticated;
         },
         methods: {
-            handleRegister() {
+             async handleRegister() {
+                this.loading = true;
                 this.message = '';
-                this.submitted = true;
-                this.$validator.validate().then(isValid => {
-                    if (isValid) {
-                        this.$store.dispatch('auth/register', this.user).then(
-                            data => {
-                                this.message = data.message;
-                                this.successful = true;
-                            },
-                            error => {
-                                this.message =
-                                    (error.response && error.response.data) ||
-                                    error.message ||
-                                    error.toString();
-                                this.successful = false;
-                            }
-                        );
-                    }
-                });
+                if (this.user.password !== this.confirmPasswordText) {
+                    this.confirmPasswordText = '';
+                    this.user.password = '';
+                    alert("Passwords don't match, please try again.")
+                    console.log(this.confirmPasswordText + '\n' + this.user.password);
+                    return;
+                }
+                var tempUser = await AuthService.register(this.user)
+                    .then(function (response) {
+                        console.log('Done Registering');
+                        return response;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        alert(error);
+                    });
+                console.log(tempUser);
+                if(tempUser == undefined){
+                    alert('TempUser undefined');
+                    return;
+                }
+                var newUser = new User(this.user.username,'', this.user.password);
+                console.log(newUser);
+                await AuthService.login(newUser)
+                    .then(function (response) {
+                        store.commit("setUser", response);
+                        store.commit("setAccess", response.accessLevel);
+                        Router.push('/');
+                    })
+                    .catch(function (error) {
+                        if (error.response.status == 401) {
+                            alert("Unauthorized.  Username or Password may be bad.")
+                        }if (error.response) {
+                            console.log(error.response.data);
+                            console.log(error.response.status);
+                            console.log(error.response.headers);
+                        }
+                    });
+                this.loading = false;
             }
         }
     };

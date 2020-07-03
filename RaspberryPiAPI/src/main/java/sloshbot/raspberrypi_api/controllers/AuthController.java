@@ -96,9 +96,9 @@ public class AuthController {
         }
 
         user.setCreatedDate(new Timestamp(DateTime.now().getMillis()));
-        userRepository.save(user);
+        User result = userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/test")
