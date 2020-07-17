@@ -160,6 +160,9 @@ public class RobotController {
 //            GpioPinDigitalOutput opticPin = gpio.provisionDigitalOutputPin(RaspiPin.getPinByAddress(optic.getPinNumber()), optic.getIngredient().getName(), PinState.HIGH);
 //            opticPins.add(opticPin);
 //        }
+        successfulDrinksMade = 0;
+        failedDrinksMade = 0;
+        drinksLostInProgress = 0;
         started = true;
     }
 
