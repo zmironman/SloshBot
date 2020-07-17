@@ -3,6 +3,10 @@ import {store} from '../store/index';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Login from "../views/Login";
+import Admin from "../views/Admin";
+import Stats from "../views/Stats";
+import MakeADrink from "../views/MakeADrink";
+import BrowseDrinks from "../views/BrowseDrinks";
 
 
 Vue.use(VueRouter)
@@ -57,7 +61,43 @@ let router = new VueRouter({
                 title: 'My Profile',
                 requiresAuth: true
             }
-        }
+        },
+        {
+            path: '/admin',
+            name: 'Admin',
+            component: Admin,
+            meta: {
+                title: 'Admin',
+                requiresAuth: true,
+            }
+        },
+        {
+            path: '/stats',
+            name: 'Stats',
+            component: Stats,
+            meta: {
+                title: 'Stats',
+                requiresAuth: true,
+            }
+        },
+        {
+            path: '/makeadrink',
+            name: 'MakeADrink',
+            component: MakeADrink,
+            meta: {
+                title: 'Make A Drink',
+                requiresAuth: true,
+            }
+        },
+        {
+            path: '/browse',
+            name: 'BrowseDrinks',
+            component: BrowseDrinks,
+            meta: {
+                title: 'Browse Drinks',
+                requiresAuth: true,
+            }
+        },
     ]
 })
 

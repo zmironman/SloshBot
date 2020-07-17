@@ -13,22 +13,22 @@
             <div class="collapse navbar-collapse" id="headerNavbar">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/">Home</a>
+                        <a class="nav-link" v-on:click="$router.push('/')">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Make a Drink</a>
+                        <a class="nav-link" v-on:click="$router.push('/makeadrink')">Make a Drink</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Browse Drinks</a>
+                        <a class="nav-link" v-on:click="$router.push('/browse')">Browse Drinks</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" v-show="this.$store.getters.isModerator">Stats</a>
+                        <a class="nav-link" v-on:click="$router.push('/stats')" v-show="this.$store.getters.isModerator">Stats</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" v-show="this.$store.getters.isAdmin">Admin</a>
+                        <a class="nav-link" v-on:click="$router.push('/admin')" v-show="this.$store.getters.isAdmin">Admin</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Account</a>
+                        <a class="nav-link" v-on:click="$router.push('/profile')">Account</a>
                     </li>
                 </ul>
                 <button class="btn btn-outline-danger" v-on:click="logout">Logout</button>
