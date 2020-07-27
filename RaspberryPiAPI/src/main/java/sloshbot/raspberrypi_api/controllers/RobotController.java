@@ -24,6 +24,22 @@ public class RobotController {
     @Autowired
     private RecipeRepository recipeRepository;
 
+    //    private final GpioController gpio = GpioFactory.getInstance();
+//    @Value("${robot.pin.stepper}")
+//    private int stepperPinNumber;
+//    @Value("${robot.pin.direction}")
+//    private int directionPinNumber;
+//    @Value("${robot.pin.home}")
+//    private int homePinNumber;
+//    @Value("${robot.pin.enable}")
+//    private int enablePinNumber;
+//
+//    final GpioPinDigitalOutput stepperPin = gpio.provisionDigitalOutputPin(RaspiPin.getPinByAddress(stepperPinNumber), "StepperPin", PinState.LOW);
+//    final GpioPinDigitalOutput directionPin = gpio.provisionDigitalOutputPin(RaspiPin.getPinByAddress(directionPinNumber), "DirectionPin", PinState.LOW);
+//    final GpioPinDigitalInput homePin = gpio.provisionDigitalInputPin(RaspiPin.getPinByAddress(homePinNumber), "HomePin");
+//    final GpioPinDigitalOutput enablePin = gpio.provisionDigitalOutputPin(RaspiPin.getPinByAddress(enablePinNumber), "EnablePin", PinState.HIGH);
+//    final List<GpioPinDigitalOutput> opticPins = new ArrayList<>();
+
     private boolean started = false;
     private volatile boolean stopped = false;
     private volatile boolean startNextDrink = false;
