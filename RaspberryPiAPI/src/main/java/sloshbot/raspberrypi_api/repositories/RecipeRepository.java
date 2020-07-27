@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
-    @Query("select r from #{#entityName} r where r.featured = true")
+    @Query("select r from #{#entityName} r where r.featured = '1'")
     List<Recipe> GetAllFeaturedRecipes();
 }
