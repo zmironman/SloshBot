@@ -1,11 +1,24 @@
 package sloshbot.raspberrypi_api.models.payloads.responses.robot;
 
-public class StopRobotResponse extends RobotResponse {
+import org.jruby.ir.Tuple;
+import sloshbot.raspberrypi_api.models.DAOs.Recipe;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class RobotStatsResponse extends RobotResponse{
     private int successfulDrinksMade;
     private int failedDrinksMade;
     private int drinksLostInProgress;
-    private int drinksLeftInQueue;
+    private Queue<Tuple<String, Recipe>> drinkQueue;
 
+    public Queue<Tuple<String, Recipe>> getDrinkQueue() {
+        return drinkQueue;
+    }
+
+    public void setDrinkQueue(Queue<Tuple<String, Recipe>> drinkQueue) {
+        this.drinkQueue = drinkQueue;
+    }
 
     public int getSuccessfulDrinksMade() {
         return successfulDrinksMade;
@@ -29,13 +42,5 @@ public class StopRobotResponse extends RobotResponse {
 
     public void setDrinksLostInProgress(int drinksLostInProgress) {
         this.drinksLostInProgress = drinksLostInProgress;
-    }
-
-    public void setDrinksLeftInQueue(int drinksLeftInQueue) {
-        this.drinksLeftInQueue = drinksLeftInQueue;
-    }
-
-    public int getDrinksLeftInQueue() {
-        return drinksLeftInQueue;
     }
 }

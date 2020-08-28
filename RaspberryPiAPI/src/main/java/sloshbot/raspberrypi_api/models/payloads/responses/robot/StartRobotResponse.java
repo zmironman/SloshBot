@@ -1,31 +1,15 @@
 package sloshbot.raspberrypi_api.models.payloads.responses.robot;
 
 public class StartRobotResponse extends RobotResponse {
-    private int successfulDrinksMade;
-    private int failedDrinksMade;
-    private int drinksLostInProgress;
+    private String message;
 
-    public int getSuccessfulDrinksMade() {
-        return successfulDrinksMade;
+    @Override
+    public String getMessage() {
+        return message;
     }
 
-    public void setSuccessfulDrinksMade(int successfulDrinksMade) {
-        this.successfulDrinksMade = successfulDrinksMade;
-    }
-
-    public int getFailedDrinksMade() {
-        return failedDrinksMade;
-    }
-
-    public void setFailedDrinksMade(int failedDrinksMade) {
-        this.failedDrinksMade = failedDrinksMade;
-    }
-
-    public int getDrinksLostInProgress() {
-        return drinksLostInProgress;
-    }
-
-    public void setDrinksLostInProgress(int drinksLostInProgress) {
-        this.drinksLostInProgress = drinksLostInProgress;
+    @Override
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

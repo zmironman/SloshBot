@@ -1,7 +1,9 @@
 package sloshbot.raspberrypi_api.controllers;
 
+import com.pi4j.io.gpio.*;
 import org.jruby.ir.Tuple;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -12,9 +14,7 @@ import sloshbot.raspberrypi_api.models.payloads.responses.robot.*;
 import sloshbot.raspberrypi_api.repositories.OpticRepository;
 import sloshbot.raspberrypi_api.repositories.RecipeRepository;
 
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.Queue;
+import java.util.*;
 
 @Controller
 @RequestMapping("/api/v1/robot")
@@ -24,21 +24,24 @@ public class RobotController {
     @Autowired
     private RecipeRepository recipeRepository;
 
-    //    private final GpioController gpio = GpioFactory.getInstance();
-//    @Value("${robot.pin.stepper}")
-//    private int stepperPinNumber;
-//    @Value("${robot.pin.direction}")
-//    private int directionPinNumber;
-//    @Value("${robot.pin.home}")
-//    private int homePinNumber;
-//    @Value("${robot.pin.enable}")
-//    private int enablePinNumber;
-//
-//    final GpioPinDigitalOutput stepperPin = gpio.provisionDigitalOutputPin(RaspiPin.getPinByAddress(stepperPinNumber), "StepperPin", PinState.LOW);
-//    final GpioPinDigitalOutput directionPin = gpio.provisionDigitalOutputPin(RaspiPin.getPinByAddress(directionPinNumber), "DirectionPin", PinState.LOW);
-//    final GpioPinDigitalInput homePin = gpio.provisionDigitalInputPin(RaspiPin.getPinByAddress(homePinNumber), "HomePin");
-//    final GpioPinDigitalOutput enablePin = gpio.provisionDigitalOutputPin(RaspiPin.getPinByAddress(enablePinNumber), "EnablePin", PinState.HIGH);
-//    final List<GpioPinDigitalOutput> opticPins = new ArrayList<>();
+    @Value("${robot.pin.stepper}")
+    private int stepperPinNumber;
+    @Value("${robot.pin.direction}")
+    private int directionPinNumber;
+    @Value("${robot.pin.home}")
+    private int homePinNumber;
+    @Value("${robot.pin.enable}")
+    private int enablePinNumber;
+    @Value("${robot.testing}")
+    private boolean testing;
+
+    private GpioController gpio;
+    private GpioPinDigitalOutput stepperPin;
+    private GpioPinDigitalOutput directionPin;
+    private GpioPinDigitalInput homePin;
+    private GpioPinDigitalOutput enablePin;
+    private List<GpioPinDigitalOutput> opticPins = new ArrayList<>();
+    private Thread thread;
 
     private boolean started = false;
     private volatile boolean stopped = false;
@@ -78,7 +81,7 @@ public class RobotController {
         if (!started) {
             response.setMessage("Robot not started, please talk to an admin.");
             return ResponseEntity.ok().body(response);
-        }else if (drinkQueue.isEmpty()) {
+        } else if (drinkQueue.isEmpty()) {
             response.setMessage("Robot does not have a drink to make.  Please wait.");
             return ResponseEntity.ok().body(response);
         }
@@ -90,41 +93,52 @@ public class RobotController {
     @GetMapping("/start")
     @PreAuthorize("hasRole('MODERATOR')")
     public ResponseEntity<StartRobotResponse> RunBot() {
-        initialize();
-        startNextDrink = true;
-        while (started) {
-            if (!drinkQueue.isEmpty() && startNextDrink) {
-                print("Starting to make a drink");
-                makingDrink = true;
-                if (makeDrink()) {
-                    successfulDrinksMade++;
-                    print("Successfully finished making a drink");
-                } else {
-                    failedDrinksMade++;
-                    print("Failed making a drink");
-                }
-                makingDrink = false;
-            }
-        }
         StartRobotResponse response = new StartRobotResponse();
-        drinksLostInProgress = drinkQueue.size();
-        response.setDrinksLostInProgress(drinksLostInProgress);
-        response.setSuccessfulDrinksMade(successfulDrinksMade);
-        response.setFailedDrinksMade(failedDrinksMade);
-        drinkQueue = new LinkedList<>();
-        stopped = true;
+        if(started){
+            response.setMessage("Robot was already started. Nothing has changed.");
+            return ResponseEntity.ok().body(response);
+        }
+        started = true;
+        thread = new Thread(() -> {
+            initialize();
+            startNextDrink = true;
+            while (started) {
+                if (!drinkQueue.isEmpty() && startNextDrink) {
+                    print("Starting to make a drink");
+                    makingDrink = true;
+                    if (makeDrink()) {
+                        successfulDrinksMade++;
+                        print("Successfully finished making a drink");
+                    } else {
+                        failedDrinksMade++;
+                        print("Failed making a drink");
+                    }
+                    makingDrink = false;
+                }
+            }
+            stopped = true;
+            return;
+        });
+        thread.start();
+        response.setMessage("Robot has been started");
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/stop")
     @PreAuthorize("hasRole('MODERATOR')")
     public ResponseEntity<StopRobotResponse> StopBot() {
+        StopRobotResponse response = new StopRobotResponse();
+        if(!started){
+            response.setMessage("Robot is not turned on.");
+            return ResponseEntity.ok().body(response);
+        }
         started = false;
         while (!stopped) Thread.onSpinWait();
-        StopRobotResponse response = new StopRobotResponse();
         response.setDrinksLostInProgress(drinksLostInProgress);
         response.setFailedDrinksMade(failedDrinksMade);
         response.setSuccessfulDrinksMade(successfulDrinksMade);
+        response.setDrinksLeftInQueue(drinkQueue.size());
+        response.setMessage("The bot has been stopped.");
         return ResponseEntity.ok().body(response);
     }
 
@@ -153,11 +167,10 @@ public class RobotController {
         if (!started) {
             response.setMessage("Robot not started, please talk to an admin.");
             return ResponseEntity.ok().body(response);
-        }
-        else if (makingDrink) {
+        } else if (makingDrink) {
             response.setMessage("Robot is currently making a drink.  Please wait.");
             return ResponseEntity.ok().body(response);
-        }else if (drinkQueue.isEmpty()) {
+        } else if (drinkQueue.isEmpty()) {
             response.setMessage("Robot does not have a drink to make.  Please wait.");
             return ResponseEntity.ok().body(response);
         }
@@ -169,17 +182,42 @@ public class RobotController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/currentstats")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<RobotStatsResponse> GetCurrentStats(){
+        RobotStatsResponse response = new RobotStatsResponse();
+        if(!started){
+            response.setMessage("The robot has not been started, please talk to an admin.");
+            return ResponseEntity.ok().body(response);
+        }
+        response.setDrinksLostInProgress(drinksLostInProgress);
+        response.setFailedDrinksMade(failedDrinksMade);
+        response.setSuccessfulDrinksMade(successfulDrinksMade);
+        response.setDrinkQueue(drinkQueue);
+        return ResponseEntity.ok().body(response);
+    }
+
     //region Private Methods
     private void initialize() {
-        print("Initializing Optics");
-//        for(Optic optic : opticRepository.findAll()){
-//            GpioPinDigitalOutput opticPin = gpio.provisionDigitalOutputPin(RaspiPin.getPinByAddress(optic.getPinNumber()), optic.getIngredient().getName(), PinState.HIGH);
-//            opticPins.add(opticPin);
-//        }
+        if (!testing) {
+            print("Initializing Pins");
+            gpio = GpioFactory.getInstance();
+            stepperPin = gpio.provisionDigitalOutputPin(RaspiPin.getPinByAddress(stepperPinNumber), "StepperPin", PinState.LOW);
+            directionPin = gpio.provisionDigitalOutputPin(RaspiPin.getPinByAddress(directionPinNumber), "DirectionPin", PinState.LOW);
+            homePin = gpio.provisionDigitalInputPin(RaspiPin.getPinByAddress(homePinNumber), "HomePin");
+            enablePin = gpio.provisionDigitalOutputPin(RaspiPin.getPinByAddress(enablePinNumber), "EnablePin", PinState.HIGH);
+            print("Initializing Optics");
+            for (Optic optic : opticRepository.findAll()) {
+                GpioPinDigitalOutput opticPin = gpio.provisionDigitalOutputPin(RaspiPin.getPinByAddress(optic.getPinNumber()), optic.getIngredient().getName(), PinState.HIGH);
+                opticPins.add(opticPin);
+            }
+        } else {
+            printTest("Initializing Pins");
+            printTest("Initializing Optics");
+        }
         successfulDrinksMade = 0;
         failedDrinksMade = 0;
         drinksLostInProgress = 0;
-        started = true;
     }
 
     private boolean makeDrink() {
@@ -206,54 +244,62 @@ public class RobotController {
     }
 
     private int goHome() {
-        print("Going home");
         int distance = 0;
-//        while (homePin.getState() != PinState.HIGH) {
-//            step();
-//            distance++;
-//        }
+        if (!testing) {
+            print("Going home");
+            while (homePin.getState() != PinState.HIGH) {
+                step();
+                distance++;
+            }
+        } else {
+            printTest("Going home");
+        }
         return distance;
     }
 
     private void pourLiquid(RecipeIngredient recipeIngredient, Optic optic) {
-        print("Pouring " + recipeIngredient.getIngredient().getName() + " from pinNumber: " + optic.getPinNumber());
-//        GpioPinDigitalOutput opticPin = opticPins.stream().filter(pin -> pinNumber == (pin.getPin().getAddress())).findAny().orElse(null);
-//        opticPin.low();
-//        for (int i = 0; i < amount; i++)
-//            delayMillis(1000);
-//        opticPin.high();
-        try {
+        if (!testing) {
+            print("Pouring " + recipeIngredient.getIngredient().getName() + " from pinNumber: " + optic.getPinNumber());
+            GpioPinDigitalOutput opticPin = opticPins.stream().filter(pin -> optic.getPinNumber() == (pin.getPin().getAddress())).findAny().orElse(null);
+            opticPin.low();
             delayMillis(recipeIngredient.getAmount() * 1000);
-        } catch (Exception e) {
-            print("SOMETHING FUCKED UP");
+            opticPin.high();
+        } else {
+            printTest("Pouring " + recipeIngredient.getIngredient().getName() + " from pinNumber: " + optic.getPinNumber());
+            delayMillis(recipeIngredient.getAmount() * 1000);
         }
     }
 
     private void movePosition(int to, int from) {
         int distance = to - from;
-        if (distance < 0)
-//        {
-//            directionPin.low();
-            distance = -distance;
-//        } else {
-//            directionPin.high();
-//        }
-//        for (int i = 0; i < distance; i++) {
-//            step();
-//        }
-        print("Moving from position " + from + " to position " + to);
-        try {
+        if (!testing) {
+            print("Moving from position " + from + " to position " + to);
+            if (distance < 0) {
+                directionPin.low();
+                distance = -distance;
+            } else {
+                directionPin.high();
+            }
+            for (int i = 0; i < distance; i++) {
+                step();
+            }
+        }
+        else{
+            printTest("Moving from position " + from + " to position " + to);
+            if(distance < 0){
+                distance = -distance;
+            }
             delayMillis(distance * 50);
-        } catch (Exception e) {
-            print("Something fucked up");
         }
     }
 
     private void step() {
-//        stepperPin.high();
-//        motorDelay();
-//        stepperPin.low();
-//        motorDelay();
+        if (!testing) {
+            stepperPin.high();
+            motorDelay();
+            stepperPin.low();
+            motorDelay();
+        }
     }
 
     private void delayNanos(long time) {
@@ -265,8 +311,12 @@ public class RobotController {
         print(end - start);
     }
 
-    private void delayMillis(long time) throws InterruptedException {
-        Thread.sleep(time);
+    private void delayMillis(long time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void motorDelay() {
@@ -292,8 +342,12 @@ public class RobotController {
         return ResponseEntity.ok().body(response);
     }
 
-    private void print(Object s){
-       System.out.println("--------" + s);
+    private void print(Object s) {
+        System.out.println("--------" + s);
+    }
+
+    private void printTest(Object s) {
+        System.out.println("-------- TESTING: " + s);
     }
     //endregion
 }
