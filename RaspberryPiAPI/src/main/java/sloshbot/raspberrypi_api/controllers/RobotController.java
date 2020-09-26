@@ -12,7 +12,9 @@ import sloshbot.raspberrypi_api.models.DAOs.*;
 import sloshbot.raspberrypi_api.models.payloads.requests.MakeDrinkRequest;
 import sloshbot.raspberrypi_api.models.payloads.responses.robot.*;
 import sloshbot.raspberrypi_api.repositories.OpticRepository;
+import sloshbot.raspberrypi_api.repositories.OrderHistoryRepository;
 import sloshbot.raspberrypi_api.repositories.RecipeRepository;
+import sloshbot.raspberrypi_api.repositories.UserRepository;
 
 import java.util.*;
 
@@ -23,6 +25,10 @@ public class RobotController {
     private OpticRepository opticRepository;
     @Autowired
     private RecipeRepository recipeRepository;
+    @Autowired
+    private OrderHistoryRepository orderHistoryRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Value("${robot.pin.stepper}")
     private int stepperPinNumber;
@@ -34,6 +40,8 @@ public class RobotController {
     private int enablePinNumber;
     @Value("${robot.testing}")
     private boolean testing;
+    @Value("${robot.id}")
+    private int sloshbotId;
 
     private GpioController gpio;
     private GpioPinDigitalOutput stepperPin;
@@ -69,6 +77,7 @@ public class RobotController {
             return ResponseEntity.ok().body(response);
         }
         drinkQueue.add(new Tuple<>(request.getUsername(), recipe));
+        addOrderToHistory(recipe.getId(), request.getUsername());
         response.setDrinkName(recipe.getName());
         response.setCurrentPosition(drinkQueue.size());
         return ResponseEntity.ok().body(response);
@@ -139,6 +148,7 @@ public class RobotController {
         response.setSuccessfulDrinksMade(successfulDrinksMade);
         response.setDrinksLeftInQueue(drinkQueue.size());
         response.setMessage("The bot has been stopped.");
+        print("The bot has been stopped");
         return ResponseEntity.ok().body(response);
     }
 
@@ -212,8 +222,8 @@ public class RobotController {
                 opticPins.add(opticPin);
             }
         } else {
-            printTest("Initializing Pins");
-            printTest("Initializing Optics");
+            print("Initializing Pins");
+            print("Initializing Optics");
         }
         successfulDrinksMade = 0;
         failedDrinksMade = 0;
@@ -243,6 +253,20 @@ public class RobotController {
         }
     }
 
+    private void addOrderToHistory(int recipeId, String username){
+        OrderHistory orderHistory = new OrderHistory();
+        orderHistory.setRecipeId(recipeId);
+        orderHistory.setSloshBotId(sloshbotId);
+        User user = userRepository.findByUsername(username).orElse(null);
+        if(user == null){
+            print("User not found.  Skipping orderHistory");
+            return;
+        }
+        orderHistory.setUserId(user.getId());
+        orderHistoryRepository.save(orderHistory);
+        print("OrderHistory added.");
+    }
+
     private int goHome() {
         int distance = 0;
         if (!testing) {
@@ -252,7 +276,7 @@ public class RobotController {
                 distance++;
             }
         } else {
-            printTest("Going home");
+            print("Going home");
         }
         return distance;
     }
@@ -265,7 +289,7 @@ public class RobotController {
             delayMillis(recipeIngredient.getAmount() * 1000);
             opticPin.high();
         } else {
-            printTest("Pouring " + recipeIngredient.getIngredient().getName() + " from pinNumber: " + optic.getPinNumber());
+            print("Pouring " + recipeIngredient.getIngredient().getName() + " from pinNumber: " + optic.getPinNumber());
             delayMillis(recipeIngredient.getAmount() * 1000);
         }
     }
@@ -285,7 +309,7 @@ public class RobotController {
             }
         }
         else{
-            printTest("Moving from position " + from + " to position " + to);
+            print("Moving from position " + from + " to position " + to);
             if(distance < 0){
                 distance = -distance;
             }
@@ -343,11 +367,10 @@ public class RobotController {
     }
 
     private void print(Object s) {
-        System.out.println("--------" + s);
-    }
-
-    private void printTest(Object s) {
-        System.out.println("-------- TESTING: " + s);
+        if(testing)
+            System.out.println("-------- TESTING: " + s);
+        else
+            System.out.println("--------" + s);
     }
     //endregion
 }
