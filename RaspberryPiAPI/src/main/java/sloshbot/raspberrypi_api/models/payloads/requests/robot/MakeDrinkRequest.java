@@ -1,4 +1,4 @@
-package sloshbot.raspberrypi_api.models.payloads.requests;
+package sloshbot.raspberrypi_api.models.payloads.requests.robot;
 
 public class MakeDrinkRequest {
     private String username;

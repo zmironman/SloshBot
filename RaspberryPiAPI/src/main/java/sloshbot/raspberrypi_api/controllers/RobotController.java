@@ -9,7 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sloshbot.raspberrypi_api.models.DAOs.*;
-import sloshbot.raspberrypi_api.models.payloads.requests.MakeDrinkRequest;
+import sloshbot.raspberrypi_api.models.payloads.requests.robot.MakeDrinkRequest;
 import sloshbot.raspberrypi_api.models.payloads.responses.robot.*;
 import sloshbot.raspberrypi_api.repositories.OpticRepository;
 import sloshbot.raspberrypi_api.repositories.OrderHistoryRepository;
@@ -77,7 +77,7 @@ public class RobotController {
             return ResponseEntity.ok().body(response);
         }
         drinkQueue.add(new Tuple<>(request.getUsername(), recipe));
-        addOrderToHistory(recipe.getId(), request.getUsername());
+        //addOrderToHistory(recipe.getId(), request.getUsername());
         response.setDrinkName(recipe.getName());
         response.setCurrentPosition(drinkQueue.size());
         return ResponseEntity.ok().body(response);
@@ -285,6 +285,7 @@ public class RobotController {
         if (!testing) {
             print("Pouring " + recipeIngredient.getIngredient().getName() + " from pinNumber: " + optic.getPinNumber());
             GpioPinDigitalOutput opticPin = opticPins.stream().filter(pin -> optic.getPinNumber() == (pin.getPin().getAddress())).findAny().orElse(null);
+            assert opticPin != null;
             opticPin.low();
             delayMillis(recipeIngredient.getAmount() * 1000);
             opticPin.high();
@@ -344,7 +345,6 @@ public class RobotController {
     }
 
     private void motorDelay() {
-        long time = 500000;
         final long INTERVAL = 1000;
         long start = System.nanoTime();
         long end = 0;

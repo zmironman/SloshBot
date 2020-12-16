@@ -63,6 +63,7 @@ create table Recipe(
         on delete restrict
         on update cascade,
     featured bool,
+    imageUrl nvarchar(2048),
     createdBy nvarchar(100) not null,
     createdDate datetime not null,
 	modifiedBy nvarchar(100) null,
